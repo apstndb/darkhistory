@@ -18,18 +18,13 @@
 
 using namespace std;
 using namespace boost::algorithm;
-//wstring wstr(L"24時間働けますが？\n何か？\nほげ\n\nあああ");
-vector<vector<wstring> > table;
-multimap<wstring,wstring> hash;
-ifstream hoge("roma2hira.dat");
-wstring str,wstr(L"つるぺたはにゃーん");
-string mstr;
+wstring wstr(L"となりのきゃくはよくかきくうきゃくだ");
 
 //----------------------------------------------------------------------
 // Draw() - Main OpenGL drawing function that is called each frame
 //----------------------------------------------------------------------
 
-void Draw( FTFont* font)
+void Draw( multimap<wstring,wstring> hash, FTFont* font)
 {
 	int    width, height;  // Window dimensions
 	double t;              // Time (in seconds)
@@ -72,21 +67,9 @@ void Draw( FTFont* font)
 		 );
 
 	// Here is where actual OpenGL rendering calls would begin...
-	//  glPushMatrix();
-	//font->Render(L"ぬるぽっぽ");
 	glTranslatef(-8.0f, 5.0f, 0.0f);
-	convertMultiByteToWideChar("人間って良いな\nところで俺のキンタマを見てくれ\nこいつをどう思う？", str);
-	// RenderText(font, str);
-	//RenderText(font, kana2roma(hash,wstr)[1]);
 	RenderVector(font, kana2roma(hash,wstr));
 
-	//RenderVector(font, table);
-	//RenderMap(font, hash, wstr);
-
-	//RenderText(font, table[0][0]);
-	// glPopMatrix();
-	//glTranslatef(.0f, -font->LineHeight(), .0f);
-	//font->Render(L"ほげああん\nあんあん");
 }
 
 
@@ -99,18 +82,16 @@ int main( int argc, char **argv )
 	int    ok;             // Flag telling if the window was opened
 	int    running;        // Flag telling if the program is running
 	FTFont *font;
+	ifstream hoge("roma2hira.dat");
+multimap<wstring,wstring> hash;
+string mstr;
+wstring str;
 	// Initialize GLFW
 	setlocale(LC_ALL, "");
 	glfwInit();
 
-	//	while(getline(hoge,mstr)) 
-	//	{vector<wstring> v;convertMultiByteToWideChar(mstr.c_str(), str);trim(str);if(starts_with(str, "#")) continue; split(v, str, is_space());if(v.size() != 2) continue;table.push_back(v);};
 	while(getline(hoge,mstr)) 
-	{vector<wstring> v;convertMultiByteToWideChar(mstr.c_str(), str);trim(str);if(starts_with(str, "#")) continue; split(v, str, is_space());if(v.size() != 2) continue;/*table.push_back(v);*/hash.insert(pair<wstring,wstring>(v[1],v[0]));};
-	//    for(vector<vector<wstring> >::iterator i = table.begin(); i != table.end(); i++) {
-	//
-	//    cout << (*i)[0] << ":" << (*i)[1] << endl;
-	//}
+	{vector<wstring> v;convertMultiByteToWideChar(mstr.c_str(), str);trim(str);if(starts_with(str, "#")) continue; split(v, str, is_space());if(v.size() != 2) continue;hash.insert(pair<wstring,wstring>(v[1],v[0]));};
 	// Open window
 	ok = glfwOpenWindow(
 			640, 480,          // Width and height of window
@@ -145,7 +126,7 @@ int main( int argc, char **argv )
 	do
 	{
 		// Call our rendering function
-		Draw(font);
+		Draw(hash,font);
 
 		// Swap front and back buffers (we use a double buffered display)
 		glfwSwapBuffers();
