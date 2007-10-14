@@ -1,12 +1,17 @@
 #include "mylib.h"
 #include <iostream>
-#include "boost/algorithm/string.hpp"
+#include <algorithm>
+#include <boost/algorithm/string.hpp>
+//#include <boost/lambda/lambda.hpp>
+//#include <boost/lambda/algorithm.hpp>
+//#include <boost/lambda/bind.hpp>
 using namespace std;
 //using std::wcout;
 //using std::cout;
 //using std::endl;
 //using std::locale;
 using namespace boost::algorithm;
+//using namespace boost::lambda;
 //void RenderMap(FTFont* font, multimap<wstring,wstring> v, wstring tstr)
 //{
 //	for(multimap<wstring,wstring >::iterator i = v.find(tstr); i != v.end();++i) {
@@ -16,25 +21,27 @@ using namespace boost::algorithm;
 //		glTranslatef(.0f, -font->LineHeight(), .0f);
 //	}
 //}
-void OutputVector(vector<wstring> v)
-{
-	for(vector<wstring>::iterator i = v.begin(); i != v.end();++i) {
-		wcout << *i << endl;
-	}
-}
 int main(int argc, char** argv)
 {
+	//boost::lambda::placeholder1_type X;
+	//boost::lambda::placeholder2_type Y;
 	setlocale(LC_ALL, "");
 	locale::global(locale(""));
 	const multimap<wstring,wstring>& hash = init("roma2hira.dat");
 	wcout.imbue(locale(""));
-	wstring str;
+	wstring str,str2;
 	convertMultiByteToWideChar(argv[1], str);
+	convertMultiByteToWideChar(argv[2], str2);
 	//cout << "hoge" <<endl;
 	//wcout << str << flush;
-	OutputVector(kana2roma(hash,str));
+	//OutputVector(kana2roma(hash,str));
+	vector<wstring> vec = kana2roma(hash,str);
+	OutputVector(ListMatchPrefix(vec,str2));
+	//	for(vector<wstring>::iterator i = vec.begin(); i != vec.end();i++)
+	//		{if((*i).substr(0,str2.size())==str2) wcout << *i << endl;}
+	//	wcout << flush;
 	return 0;
-	}
+}
 //void RenderText(FTFont* font, wstring str)
 //{
 //	vector<wstring> v;

@@ -69,7 +69,7 @@ void Draw( vector<wstring> v, FTFont* font)
 	// Here is where actual OpenGL rendering calls would begin...
 	glTranslatef(-8.0f, 5.0f, 0.0f);
 	//RenderVector(font, kana2roma(hash,wstr));
-	RenderVector(font, vector<wstring>(v.begin(),(v.begin())+10));
+	RenderVector(font, vector<wstring>(v.begin(),v.begin()+10));
 
 }
 

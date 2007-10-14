@@ -1,9 +1,12 @@
 #include "mylib.h"
 #include <fstream>
+#include <iostream>
 #include <boost/algorithm/string.hpp>
 using std::wifstream;
 using std::pair;
 using std::locale;
+using std::wcout;
+using std::endl;
 using namespace boost::algorithm;
 vector<wstring> kana2roma(multimap<wstring,wstring> v, wstring tstr)
 {
@@ -58,4 +61,26 @@ const multimap<wstring,wstring>& init(const char* filename)
 		hash.insert(pair<wstring,wstring>(v[1],v[0]));
 	}
 	return hash;
+}
+vector<wstring> ListMatchPrefix(vector<wstring>& vec,wstring str)
+{
+	vector<wstring> result;
+	//for(vector<wstring>::iterator i = vec.begin(); i != vec.end();i++)
+	//		{if((*i).substr(0,str.size())==str) result.push_back(*i);}
+	for(vector<wstring>::iterator i = vec.begin(); i != vec.end();i++)
+	{
+		if(ComparePrefix((*i),str)) result.push_back(*i);
+	}
+	return result;
+}
+bool ComparePrefix(wstring lstr,wstring sstr)
+{
+	return lstr.substr(0,sstr.size())==sstr;
+
+}
+void OutputVector(vector<wstring> v)
+{
+	for(vector<wstring>::iterator i = v.begin(); i != v.end();++i) {
+		wcout << *i << endl;
+	}
 }
