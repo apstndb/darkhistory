@@ -17,7 +17,6 @@
 
 using namespace std;
 using namespace boost::algorithm;
-wstring wstr(L"となりのきゃくはよくかきくうきゃくだ");
 
 //----------------------------------------------------------------------
 // Draw() - Main OpenGL drawing function that is called each frame
@@ -69,7 +68,11 @@ void Draw( vector<wstring> v, FTFont* font)
 	// Here is where actual OpenGL rendering calls would begin...
 	glTranslatef(-8.0f, 5.0f, 0.0f);
 	//RenderVector(font, kana2roma(hash,wstr));
-	RenderVector(font, vector<wstring>(v.begin(),v.begin()+10));
+	//RenderVector(font, vector<wstring>(v.begin(),v.begin()+10));
+	//RenderMap(font, hash, wstring());
+	RenderVector(font, v);
+	//convertMultiByteToWideChar("ほげほげぬるぽ", wstr);
+	//RenderText(font, wstr);
 
 }
 
@@ -80,6 +83,8 @@ void Draw( vector<wstring> v, FTFont* font)
 
 int main( int argc, char **argv )
 {
+wstring wstr(L"となりのきゃくはよくかきくうきゃくだ");
+//convertMultiByteToWideChar("となりのきゃくはよくかきくうきゃくだ",wstr);
 	int    ok;             // Flag telling if the window was opened
 	int    running;        // Flag telling if the program is running
 	FTFont *font;
@@ -116,7 +121,7 @@ int main( int argc, char **argv )
 	if (!font->FaceSize(SIZE)) exit(1);                // can't set font size
 	if (!font->CharMap(ft_encoding_unicode)) exit(1);  // can't set charmap 
 	vector<wstring> a = kana2roma(hash,wstr);
-	wcout << a.size() << a[0];
+	cout << a.size() <<  endl;
 	//font->Depth(DEPTH);    // for FTGLExtrdFont()
 	// Main rendering loop
 	do
