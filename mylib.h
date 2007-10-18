@@ -10,3 +10,4 @@ const multimap<wstring,wstring>& init(const char*);
 bool ComparePrefix(wstring,wstring);
 vector<wstring> ListMatchPrefix(vector<wstring>& ,wstring);
 void OutputVector(vector<wstring>);
+bool match(vector<wstring>, wstring);

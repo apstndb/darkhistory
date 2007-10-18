@@ -1,0 +1,7 @@
+ARCH = i686-windows-mingw32
+CC = $(ARCH)-gcc
+CXX = $(ARCH)-g++
+#LD = $(ARCH)-ld
+LDLIBS = -lstdc++#-lglfw -lGLU -lftgl
+CXXFLAGS = -Wall -pedantic -g `freetype-config --cflags` -I/home/gama/mingw/lib/boost_1_34_1
+include Makefile

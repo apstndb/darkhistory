@@ -1,7 +1,9 @@
 #include "mylib.h"
 #include <fstream>
 #include <iostream>
+#ifndef WIN32
 #include <iconv.h>
+#endif
 #include <boost/algorithm/string.hpp>
 using std::wifstream;
 using std::ifstream;
@@ -47,58 +49,46 @@ void convertMultiByteToWideChar(const char* pStrMultiByte, std::wstring& rStrWid
 
 const multimap<wstring,wstring>& init(const char* filename)
 {
-	//	setlocale(LC_ALL, "Unicode");
+	setlocale(LC_ALL, "");
 	static multimap<wstring,wstring> hash;
 	ifstream dat(filename);
 	wstring wstr;
 	string str;
-	if(!dat.is_open()) {exit(1);}
+	if(!dat.is_open()) {
+		exit(512);
+
+	}
 	//locale::global(locale(""));
 	//dat.imbue(locale(""));
-	//cout << "hoge" << endl;
 	//iconv_t cd = iconv_open("WCHAR_T", "UTF8");
+#ifndef WIN32
+	iconv_t cd = iconv_open("WCHAR_T", "CP932");
+#endif
 
 	while(getline(dat,str)) 
 	{
-		//char sstrbuf[512] ;
-		//wchar_t dstrbuf[512] ;
-		//wchar_t wstr[512];
-		//char *wstr = wstrbuf;
-		//if(!file.is_open()) {exit(1);}
+#ifndef WIN32
+		wchar_t dstrbuf[512] ;
+		char* sstr = (char*)str.c_str() ;
+		//		const char* sstr = sstrbuf ;
+		char* dstr = (char*)dstrbuf ;
+		size_t size1 = str.size()+1;
+		size_t size2 = sizeof(dstrbuf)/sizeof(dstrbuf[0]);
+		iconv(cd, &sstr, &size1,&dstr,&size2);
+		*((wchar_t* )dstr) = L'\0';
+		/*wstring */wstr = dstrbuf;
+#else
 
-		//while(getline(file,str))
-		//{
-		//const char* sstr = str.c_str() ;
-		//const char* sstr = sstrbuf ;
-		//char* dstr = (char*)dstrbuf ;
-		//string str("ぬるぽ");
-		//strcpy(sstrbuf ,str.c_str());
-		//size_t size1 = str.size()+1;
-		//size_t size2 = sizeof(dstrbuf)/sizeof(dstrbuf[0]);
-		//		cout << sstrbuf <<flush;// ": " << size1 << ": " << size2 << endl;
-		//		cout << "    " << flush;
-		//		while(size1  0) {
-		//	cout << "size1:" << size1 << " size2:" << size2<< flush;
-		//iconv(cd, &sstr, &size1,&dstr,&size2);
-		//		
-		//	cout << "size1:" << size1 << " size2:" << size2<< endl;
-		//}
-		//*((wchar_t* )dstr) = L'\0';
-		//wcout << wstring(dstrbuf) << endl;
-		//wstring wstr(dstrbuf);
-		//	wcout << L"テスト" << endl;
-		//	}
-		//		return 0;
-		//}
 		convertMultiByteToWideChar(str.c_str(), wstr);
+#endif
 		vector<wstring> v;
 		trim(wstr);
 		if(starts_with(wstr, "#")) continue;
 		split(v, wstr, is_space());
 		if(v.size() != 2) continue;
 		hash.insert(pair<wstring,wstring>(v[1],v[0]));
-}
-return hash;
+	}
+	return hash;
 }
 vector<wstring> ListMatchPrefix(vector<wstring>& vec,wstring str)
 {
@@ -121,4 +111,11 @@ void OutputVector(vector<wstring> v)
 	for(vector<wstring>::iterator i = v.begin(); i != v.end();++i) {
 		wcout << *i << endl;
 	}
+}
+bool match(vector<wstring> v, wstring s)
+{
+	for(vector<wstring>::iterator i = v.begin(); i != v.end();++i) {
+		if(*i == s) {return true;}
+	}
+	return false;
 }

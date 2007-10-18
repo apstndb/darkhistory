@@ -1,345 +1,345 @@
 # vi:set ts=8 sts=8 sw=8 tw=0:
 #
-# roma2hira.dat - ãƒ­ãƒ¼ãƒžå­—â†’å¹³ä»®åå¤‰æ›è¡¨
+# roma2hira.dat - ƒ[ƒ}Žš¨•½‰¼–¼•ÏŠ·•\
 # 
 # Last Change: 18-Jun-2004.
 # Written By:  Muraoka Taro  <koron@tka.att.ne.jp>
 
-# ã“ã„ã¤ã‚’ã‚«ã‚¹ã‚¿ãƒžã‚¤ã‚ºã™ã‚‹ã“ã¨ã§ãƒ­ãƒ¼ãƒžå­—ã®å…¥åŠ›æ–¹å¼ãŒå¤‰ã‚ã‚Šã¾ã™ã€‚
-# ç¾åœ¨ã¯MS-IME2000ã‚’å‚è€ƒã«æ±ºå®šã—ã¦ã„ã¾ã™ã€‚
-# æ¼¢å­—ã‚³ãƒ¼ãƒ‰ã®é•ã„ã‚’å¸åŽã™ã‚‹å½¹å‰²ã‚‚æžœãŸã—ã¾ã™ã€‚
-# xnã¨xtuã«ã¯ã€Œã‚“ã€ã¨ã€Œã£ã€ã‚’æŒ‡å®šã™ã‚‹å½¹å‰²ãŒã‚ã‚Šã¾ã™ã€‚
-# {from} {to}ã®å½¢å¼ã§ã™ã€‚
-# {from}ã¨{to}ã®é–“ã¯ç©ºç™½æ–‡å­—(isspace())ã§åŒºåˆ‡ã‚Šã¾ã™ã€‚
+# ‚±‚¢‚Â‚ðƒJƒXƒ^ƒ}ƒCƒY‚·‚é‚±‚Æ‚Åƒ[ƒ}Žš‚Ì“ü—Í•ûŽ®‚ª•Ï‚í‚è‚Ü‚·B
+# Œ»Ý‚ÍMS-IME2000‚ðŽQl‚ÉŒˆ’è‚µ‚Ä‚¢‚Ü‚·B
+# Š¿ŽšƒR[ƒh‚Ìˆá‚¢‚ð‹zŽû‚·‚é–ðŠ„‚à‰Ê‚½‚µ‚Ü‚·B
+# xn‚Æxtu‚É‚Íu‚ñv‚Æu‚Áv‚ðŽw’è‚·‚é–ðŠ„‚ª‚ ‚è‚Ü‚·B
+# {from} {to}‚ÌŒ`Ž®‚Å‚·B
+# {from}‚Æ{to}‚ÌŠÔ‚Í‹ó”’•¶Žš(isspace())‚Å‹æØ‚è‚Ü‚·B
 
-a	ã‚
-i	ã„
-u	ã†
-e	ãˆ
-o	ãŠ
+a	‚ 
+i	‚¢
+u	‚¤
+e	‚¦
+o	‚¨
 
-ka	ã‹
-ki	ã
-ku	ã
-ke	ã‘
-ko	ã“
+ka	‚©
+ki	‚«
+ku	‚­
+ke	‚¯
+ko	‚±
 
-sa	ã•
-si	ã—
-su	ã™
-se	ã›
-so	ã
+sa	‚³
+si	‚µ
+su	‚·
+se	‚¹
+so	‚»
 
-ta	ãŸ
-ti	ã¡
-tu	ã¤
-te	ã¦
-to	ã¨
+ta	‚½
+ti	‚¿
+tu	‚Â
+te	‚Ä
+to	‚Æ
 
-na	ãª
-ni	ã«
-nu	ã¬
-ne	ã­
-no	ã®
+na	‚È
+ni	‚É
+nu	‚Ê
+ne	‚Ë
+no	‚Ì
 
-ha	ã¯
-hi	ã²
-hu	ãµ
-he	ã¸
-ho	ã»
+ha	‚Í
+hi	‚Ð
+hu	‚Ó
+he	‚Ö
+ho	‚Ù
 
-ma	ã¾
-mi	ã¿
-mu	ã‚€
-me	ã‚
-mo	ã‚‚
+ma	‚Ü
+mi	‚Ý
+mu	‚Þ
+me	‚ß
+mo	‚à
 
-ya	ã‚„
-yi	ã„
-yu	ã‚†
-ye	ã„ã‡
-yo	ã‚ˆ
+ya	‚â
+yi	‚¢
+yu	‚ä
+ye	‚¢‚¥
+yo	‚æ
 
-ra	ã‚‰
-ri	ã‚Š
-ru	ã‚‹
-re	ã‚Œ
-ro	ã‚
+ra	‚ç
+ri	‚è
+ru	‚é
+re	‚ê
+ro	‚ë
 
-wa	ã‚
-wi	ã‚
-wu	ã†
-we	ã‚‘
-wo	ã‚’
-
-
-ga	ãŒ
-gi	ãŽ
-gu	ã
-ge	ã’
-go	ã”
-
-za	ã–
-zi	ã˜
-zu	ãš
-ze	ãœ
-zo	ãž
-
-da	ã 
-di	ã¢
-du	ã¥
-de	ã§
-do	ã©
-
-ba	ã°
-bi	ã³
-bu	ã¶
-be	ã¹
-bo	ã¼
-
-pa	ã±
-pi	ã´
-pu	ã·
-pe	ãº
-po	ã½
+wa	‚í
+wi	‚î
+wu	‚¤
+we	‚ï
+wo	‚ð
 
 
-la	ã
-li	ãƒ
-lu	ã…
-le	ã‡
-lo	ã‰
+ga	‚ª
+gi	‚¬
+gu	‚®
+ge	‚°
+go	‚²
 
-lya	ã‚ƒ
-lyi	ãƒ
-lyu	ã‚…
-lye	ã‡
-lyo	ã‚‡
+za	‚´
+zi	‚¶
+zu	‚¸
+ze	‚º
+zo	‚¼
 
-xa	ã
-xi	ãƒ
-xu	ã…
-xe	ã‡
-xo	ã‰
+da	‚¾
+di	‚À
+du	‚Ã
+de	‚Å
+do	‚Ç
 
-xya	ã‚ƒ
-xyi	ãƒ
-xyu	ã‚…
-xye	ã‡
-xyo	ã‚‡
+ba	‚Î
+bi	‚Ñ
+bu	‚Ô
+be	‚×
+bo	‚Ú
 
-kya	ãã‚ƒ
-kyi	ããƒ
-kyu	ãã‚…
-kye	ãã‡
-kyo	ãã‚‡
-
-gwa	ãã
-gwi	ããƒ
-gwu	ãã…
-gwe	ãã‡
-gwo	ãã‰
-
-gya	ãŽã‚ƒ
-gyi	ãŽãƒ
-gyu	ãŽã‚…
-gye	ãŽã‡
-gyo	ãŽã‚‡
-
-sha	ã—ã‚ƒ
-shi	ã—
-shu	ã—ã‚…
-she	ã—ã‡
-sho	ã—ã‚‡
-
-swa	ã™ã
-swi	ã™ãƒ
-swu	ã™ã…
-swe	ã™ã‡
-swo	ã™ã‰
-
-sya	ã—ã‚ƒ
-syi	ã—ãƒ
-syu	ã—ã‚…
-sye	ã—ã‡
-syo	ã—ã‚‡
-
-tha	ã¦ã‚ƒ
-thi	ã¦ãƒ
-thu	ã¦ã‚…
-the	ã¦ã‡
-tho	ã¦ã‚‡
-
-tsa	ã¤ã
-tsi	ã¤ãƒ
-tsu	ã¤
-tse	ã¤ã‡
-tso	ã¤ã‰
-
-twa	ã¨ã
-twi	ã¨ãƒ
-twu	ã¨ã…
-twe	ã¨ã‡
-two	ã¨ã‰
-
-tya	ã¡ã‚ƒ
-tyi	ã¡ãƒ
-tyu	ã¡ã‚…
-tye	ã¡ã‡
-tyo	ã¡ã‚‡
+pa	‚Ï
+pi	‚Ò
+pu	‚Õ
+pe	‚Ø
+po	‚Û
 
 
-nya	ã«ã‚ƒ
-nyi	ã«ãƒ
-nyu	ã«ã‚…
-nye	ã«ã‡
-nyo	ã«ã‚‡
+la	‚Ÿ
+li	‚¡
+lu	‚£
+le	‚¥
+lo	‚§
 
-hya	ã²ã‚ƒ
-hyi	ã²ãƒ
-hyu	ã²ã‚…
-hye	ã²ã‡
-hyo	ã²ã‚‡
+lya	‚á
+lyi	‚¡
+lyu	‚ã
+lye	‚¥
+lyo	‚å
 
-bya	ã³ã‚ƒ
-byi	ã³ãƒ
-byu	ã³ã‚…
-bye	ã³ã‡
-byo	ã³ã‚‡
+xa	‚Ÿ
+xi	‚¡
+xu	‚£
+xe	‚¥
+xo	‚§
 
-pya	ã´ã‚ƒ
-pyi	ã´ãƒ
-pyu	ã´ã‚…
-pye	ã´ã‡
-pyo	ã´ã‚‡
+xya	‚á
+xyi	‚¡
+xyu	‚ã
+xye	‚¥
+xyo	‚å
 
-mya	ã¿ã‚ƒ
-myi	ã¿ãƒ
-myu	ã¿ã‚…
-mye	ã¿ã‡
-myo	ã¿ã‚‡
+kya	‚«‚á
+kyi	‚«‚¡
+kyu	‚«‚ã
+kye	‚«‚¥
+kyo	‚«‚å
 
-rya	ã‚Šã‚ƒ
-ryi	ã‚Šãƒ
-ryu	ã‚Šã‚…
-rye	ã‚Šã‡
-ryo	ã‚Šã‚‡
+gwa	‚®‚Ÿ
+gwi	‚®‚¡
+gwu	‚®‚£
+gwe	‚®‚¥
+gwo	‚®‚§
 
+gya	‚¬‚á
+gyi	‚¬‚¡
+gyu	‚¬‚ã
+gye	‚¬‚¥
+gyo	‚¬‚å
 
-ca	ã‹
-ci	ã—
-cu	ã
-ce	ã›
-co	ã“
+sha	‚µ‚á
+shi	‚µ
+shu	‚µ‚ã
+she	‚µ‚¥
+sho	‚µ‚å
 
-cha	ã¡ã‚ƒ
-chi	ã¡
-chu	ã¡ã‚…
-che	ã¡ã‡
-cho	ã¡ã‚‡
+swa	‚·‚Ÿ
+swi	‚·‚¡
+swu	‚·‚£
+swe	‚·‚¥
+swo	‚·‚§
 
-fa	ãµã
-fi	ãµãƒ
-fu	ãµ
-fe	ãµã‡
-fo	ãµã‰
+sya	‚µ‚á
+syi	‚µ‚¡
+syu	‚µ‚ã
+sye	‚µ‚¥
+syo	‚µ‚å
 
-fwa	ãµã
-fwi	ãµãƒ
-fwu	ãµã…
-fwe	ãµã‡
-fwo	ãµã‰
+tha	‚Ä‚á
+thi	‚Ä‚¡
+thu	‚Ä‚ã
+the	‚Ä‚¥
+tho	‚Ä‚å
 
-fya	ãµã‚ƒ
-fyi	ãµãƒ
-fyu	ãµã‚…
-fye	ãµã‡
-fyo	ãµã‚‡
+tsa	‚Â‚Ÿ
+tsi	‚Â‚¡
+tsu	‚Â
+tse	‚Â‚¥
+tso	‚Â‚§
 
-ja	ã˜ã‚ƒ
-ji	ã˜
-ju	ã˜ã‚…
-je	ã˜ã‡
-jo	ã˜ã‚‡
+twa	‚Æ‚Ÿ
+twi	‚Æ‚¡
+twu	‚Æ‚£
+twe	‚Æ‚¥
+two	‚Æ‚§
 
-jya	ã˜ã‚ƒ
-jyi	ã˜ãƒ
-jyu	ã˜ã‚…
-jye	ã˜ã‡
-jyo	ã˜ã‚‡
-
-qa	ãã
-qi	ããƒ
-qu	ã
-qe	ãã‡
-qo	ãã‰
-
-qwa	ãã
-qwi	ããƒ
-qwu	ãã…
-qwe	ãã‡
-qwo	ãã‰
-
-qya	ãã‚ƒ
-qyi	ããƒ
-qyu	ãã‚…
-qye	ãã‡
-qyo	ãã‚‡
-
-va	ãƒ´ã
-vi	ãƒ´ãƒ
-vu	ãƒ´
-ve	ãƒ´ã‡
-vo	ãƒ´ã‰
-
-vya	ãƒ´ã‚ƒ
-vyi	ãƒ´ãƒ
-vyu	ãƒ´ã‚…
-vye	ãƒ´ã‡
-vyo	ãƒ´ã‚‡
+tya	‚¿‚á
+tyi	‚¿‚¡
+tyu	‚¿‚ã
+tye	‚¿‚¥
+tyo	‚¿‚å
 
 
-nn	ã‚“
-n'	ã‚“
-xn	ã‚“
-ltu	ã£
-xtu	ã£
-lwa	ã‚Ž
-xwa	ã‚Ž
-lka	ãƒµ
-xka	ãƒµ
-lke	ãƒ¶
-xke	ãƒ¶
-kwa	ãã
+nya	‚É‚á
+nyi	‚É‚¡
+nyu	‚É‚ã
+nye	‚É‚¥
+nyo	‚É‚å
 
--	ãƒ¼
-~	ã€œ
-#,	ã€
-#.	ã€‚
-#[	ã€Œ
-#]	ã€
+hya	‚Ð‚á
+hyi	‚Ð‚¡
+hyu	‚Ð‚ã
+hye	‚Ð‚¥
+hyo	‚Ð‚å
+
+bya	‚Ñ‚á
+byi	‚Ñ‚¡
+byu	‚Ñ‚ã
+bye	‚Ñ‚¥
+byo	‚Ñ‚å
+
+pya	‚Ò‚á
+pyi	‚Ò‚¡
+pyu	‚Ò‚ã
+pye	‚Ò‚¥
+pyo	‚Ò‚å
+
+mya	‚Ý‚á
+myi	‚Ý‚¡
+myu	‚Ý‚ã
+mye	‚Ý‚¥
+myo	‚Ý‚å
+
+rya	‚è‚á
+ryi	‚è‚¡
+ryu	‚è‚ã
+rye	‚è‚¥
+ryo	‚è‚å
 
 
-mba	ã‚“ã°
-mbi	ã‚“ã³
-mbu	ã‚“ã¶
-mbe	ã‚“ã¹
-mbo	ã‚“ã¼
+ca	‚©
+ci	‚µ
+cu	‚­
+ce	‚¹
+co	‚±
 
-mpa	ã‚“ã±
-mpi	ã‚“ã´
-mpu	ã‚“ã·
-mpe	ã‚“ãº
-mpo	ã‚“ã½
+cha	‚¿‚á
+chi	‚¿
+chu	‚¿‚ã
+che	‚¿‚¥
+cho	‚¿‚å
 
-mma	ã‚“ã¾
-mmi	ã‚“ã¿
-mmu	ã‚“ã‚€
-mme	ã‚“ã‚
-mmo	ã‚“ã‚‚
+fa	‚Ó‚Ÿ
+fi	‚Ó‚¡
+fu	‚Ó
+fe	‚Ó‚¥
+fo	‚Ó‚§
 
-tcha	ã£ã¡ã‚ƒ
-tchi	ã£ã¡
-tchu	ã£ã¡ã‚…
-tche	ã£ã¡ã‡
-tcho	ã£ã¡ã‚‡
+fwa	‚Ó‚Ÿ
+fwi	‚Ó‚¡
+fwu	‚Ó‚£
+fwe	‚Ó‚¥
+fwo	‚Ó‚§
+
+fya	‚Ó‚á
+fyi	‚Ó‚¡
+fyu	‚Ó‚ã
+fye	‚Ó‚¥
+fyo	‚Ó‚å
+
+ja	‚¶‚á
+ji	‚¶
+ju	‚¶‚ã
+je	‚¶‚¥
+jo	‚¶‚å
+
+jya	‚¶‚á
+jyi	‚¶‚¡
+jyu	‚¶‚ã
+jye	‚¶‚¥
+jyo	‚¶‚å
+
+qa	‚­‚Ÿ
+qi	‚­‚¡
+qu	‚­
+qe	‚­‚¥
+qo	‚­‚§
+
+qwa	‚­‚Ÿ
+qwi	‚­‚¡
+qwu	‚­‚£
+qwe	‚­‚¥
+qwo	‚­‚§
+
+qya	‚­‚á
+qyi	‚­‚¡
+qyu	‚­‚ã
+qye	‚­‚¥
+qyo	‚­‚å
+
+va	ƒ”‚Ÿ
+vi	ƒ”‚¡
+vu	ƒ”
+ve	ƒ”‚¥
+vo	ƒ”‚§
+
+vya	ƒ”‚á
+vyi	ƒ”‚¡
+vyu	ƒ”‚ã
+vye	ƒ”‚¥
+vyo	ƒ”‚å
+
+
+nn	‚ñ
+n'	‚ñ
+xn	‚ñ
+ltu	‚Á
+xtu	‚Á
+lwa	‚ì
+xwa	‚ì
+lka	ƒ•
+xka	ƒ•
+lke	ƒ–
+xke	ƒ–
+kwa	‚­‚Ÿ
+
+-	[
+~	?
+#,	A
+#.	B
+#[	u
+#]	v
+
+
+mba	‚ñ‚Î
+mbi	‚ñ‚Ñ
+mbu	‚ñ‚Ô
+mbe	‚ñ‚×
+mbo	‚ñ‚Ú
+
+mpa	‚ñ‚Ï
+mpi	‚ñ‚Ò
+mpu	‚ñ‚Õ
+mpe	‚ñ‚Ø
+mpo	‚ñ‚Û
+
+mma	‚ñ‚Ü
+mmi	‚ñ‚Ý
+mmu	‚ñ‚Þ
+mme	‚ñ‚ß
+mmo	‚ñ‚à
+
+tcha	‚Á‚¿‚á
+tchi	‚Á‚¿
+tchu	‚Á‚¿‚ã
+tche	‚Á‚¿‚¥
+tcho	‚Á‚¿‚å
