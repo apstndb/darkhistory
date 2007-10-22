@@ -1,7 +1,12 @@
+include Makefile
+libdir = /home/gama/work/mingwtest
 ARCH = i686-windows-mingw32
 CC = $(ARCH)-gcc
 CXX = $(ARCH)-g++
 #LD = $(ARCH)-ld
-LDLIBS = -lstdc++#-lglfw -lGLU -lftgl
-CXXFLAGS = -Wall -pedantic -g `freetype-config --cflags` -I/home/gama/mingw/lib/boost_1_34_1
-include Makefile
+LIBS = $(libdir)/glfw.bin.WIN32/lib-mingw/libglfw.a $(libdir)/ftgl/libftgl.a $(libdir)/freetype/lib/libfreetype.dll.a
+LDLIBS = $(LIBS) -lstdc++ -lglu32 -lopengl32#-lglfw -lGLU -lftgl
+CXXFLAGS = -Wall -pedantic -g `freetype-config --cflags` -I/home/gama/mingw/lib/boost_1_34_1 -I$(libdir)/ftgl -I$(libdir)/freetype/include -I$(libdir)/glfw.bin.WIN32/include
+CFLAGS = $(CFLAGS)
+darkhistory.exe: darkhistory.cpp mylib.cpp mygllib.cpp
+	$(CXX) $(CXXFLAGS) $+ $(LDLIBS) -o $@
