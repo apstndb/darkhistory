@@ -262,7 +262,7 @@ int	main( int argc,	char **argv	)
 	int	   ok;			   // Flag telling if the window was opened
 	int	   running;		   // Flag telling if the program is running
 	setlocale(LC_ALL, "");
-	//const multimap<wstring,wstring>& hash = init("roma2hira.dat");
+	const multimap<wstring,wstring>& hash = init("roma2hira.dat");
 	/*
 	   treefactory t(hash); 
 	   */
@@ -279,8 +279,8 @@ int	main( int argc,	char **argv	)
 	//wcout << test->children << endl;
 	//	test->print();
 	//	word i;
-	//tanuki.print();
-	//	return 0;
+	tanuki.print();
+		return 0;
 	//	OutputVector(vec);
 	//	wcout << vec.size() << endl;
 
