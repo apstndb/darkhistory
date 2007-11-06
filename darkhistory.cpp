@@ -70,6 +70,7 @@ void Draw( vector<wstring> v, FTFont* font)
 	//RenderVector(font, kana2roma(hash,wstr));
 	//RenderVector(font, vector<wstring>(v.begin(),v.begin()+10));
 	//RenderMap(font, hash, wstring());
+	//RenderVector(font, v);
 	RenderVector(font, v);
 	//convertMultiByteToWideChar("ほげほげぬるぽ", wstr);
 	//RenderText(font, wstr);
@@ -83,7 +84,7 @@ void Draw( vector<wstring> v, FTFont* font)
 
 int main( int argc, char **argv )
 {
-wstring wstr(L"となりのきゃくはよくかきくうきゃくだ");
+wstring wstr(L"きょんはちじょうじま");
 //convertMultiByteToWideChar("となりのきゃくはよくかきくうきゃくだ",wstr);
 	int    ok;             // Flag telling if the window was opened
 	int    running;        // Flag telling if the program is running
