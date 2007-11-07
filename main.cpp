@@ -14,26 +14,34 @@ class word {
 	wstring str;
 	wstring input;
 	public:
-	word(wchar_t* ws)
+	word(const wchar_t*& ws)
 		:str(ws)
 	{
 	}
-	word(wstring ws)
+	word(const wstring& ws)
 		:str(ws)
 	{
 	}
 	word()
 	{
 	}
-	void add(wchar_t c)
+	inline void backspace()
+	{
+		if(input.size()) input.resize(input.size()-1);
+	}
+	inline void add(wchar_t c)
 	{
 		input += c;
 	}
-	void print()
+	inline void print()
 	{
 		wcout << str << endl;
 	}
-	void printinput()
+//	inline void printkana(multimap<wstring,wstring> hash)
+//	{
+//		wcout << str << endl;
+//	}
+	inline void printinput()
 	{
 		wcout << input << endl;
 	}
@@ -100,7 +108,7 @@ class treefactory {
 word tanuki(wstring(L"ほげほげほげら"));
 //const wstring word(L"ふぁいなるふぁんたじー");
 //vector<wstring> a ;
-bool flag =	false;
+bool flag = false;
 //wstring	wstr;
 //vector<wstring>	vec;
 //GLuint tex;// = 1;
@@ -186,14 +194,15 @@ void Draw( void	)
 	double t;			   // Time (in seconds)
 
 	//glEnable( GL_TEXTURE_2D );
-/*	if(!flag &&	glfwGetKey(	GLFW_KEY_BACKSPACE ) ==	GLFW_PRESS)	{ 
+	if(!flag &&glfwGetKey(GLFW_KEY_BACKSPACE)==GLFW_PRESS)	{ 
 		flag = true;
+		tanuki.backspace();
+
 //		if(wstr.size())	wstr.resize(wstr.size()-1);
 //		print();
-		settime();
+//		settime();
 	}
-	*/
-//	if(glfwGetKey( GLFW_KEY_BACKSPACE )	== GLFW_RELEASE) { flag	= false	;/*wstr.resize(wstr.size()-2);*/}
+	if(glfwGetKey(GLFW_KEY_BACKSPACE)==GLFW_RELEASE) {flag=false;}
 
 	// Get current time
 	t =	glfwGetTime();
@@ -232,7 +241,7 @@ void Draw( void	)
 		 );
 
 	// Here	is where actual	OpenGL rendering calls would begin...
-/*	if(t < 6.0) glTranslated(.0,fabs(sin(6.28*t))/(t*t),-5/(t*t*t*t));
+	if(t < 6.0) glTranslated(.0,fabs(sin(6.28*t))/(t*t),-5/(t*t*t*t));
 
 	glScalef(1.5f,1.5f,1.5f);
 	glEnable( GL_TEXTURE_2D );
@@ -248,7 +257,7 @@ void Draw( void	)
 	glVertex2d(-8.0,-1.0);
 	glEnd();
 	glDisable( GL_TEXTURE_2D );
-	*/
+	
 
 }
 
@@ -262,7 +271,9 @@ int	main( int argc,	char **argv	)
 	int	   ok;			   // Flag telling if the window was opened
 	int	   running;		   // Flag telling if the program is running
 	setlocale(LC_ALL, "");
-	const multimap<wstring,wstring>& hash = init("roma2hira.dat");
+	//const multimap<wstring,wstring>& hash = init("roma2hira.dat");
+	//const vector<pair<wstring,wstring> >& vec = initvec("roma2hira.dat");
+	//wcout << vec.size() << endl;
 	/*
 	   treefactory t(hash); 
 	   */
@@ -280,7 +291,7 @@ int	main( int argc,	char **argv	)
 	//	test->print();
 	//	word i;
 	tanuki.print();
-		return 0;
+	//	return 0;
 	//	OutputVector(vec);
 	//	wcout << vec.size() << endl;
 
@@ -325,7 +336,7 @@ int	main( int argc,	char **argv	)
 	// Upload texture from file to texture memory
 	//     glfwLoadTexture2D( "pong3d_title.tga", 0 );
 	//
-//	LoadTextures();
+	LoadTextures();
 	// Main	rendering loop
 	do
 	{

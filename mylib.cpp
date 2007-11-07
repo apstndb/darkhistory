@@ -5,6 +5,7 @@
 #include <iconv.h>
 #endif
 #include <boost/algorithm/string.hpp>
+#include <boost/shared_container_iterator.hpp>
 using std::wifstream;
 using std::ifstream;
 using std::pair;
@@ -47,6 +48,50 @@ void convertMultiByteToWideChar(const char* pStrMultiByte, std::wstring& rStrWid
 	delete[] pStrWChar;
 }
 
+const vector<pair<wstring,wstring> >& initvec(const char* filename)
+{
+	setlocale(LC_ALL, "");
+//	static multimap<wstring,wstring> hash;
+	static vector<pair<wstring,wstring> > vec;
+	ifstream dat(filename);
+	wstring wstr;
+	string str;
+	if(!dat.is_open()) {
+		exit(512);
+
+	}
+	//locale::global(locale(""));
+	//dat.imbue(locale(""));
+	//iconv_t cd = iconv_open("WCHAR_T", "UTF8");
+#ifndef WIN32
+	iconv_t cd = iconv_open("WCHAR_T", "CP932");
+#endif
+
+	while(getline(dat,str)) 
+	{
+#ifndef WIN32
+		wchar_t dstrbuf[512] ;
+		char* sstr = (char*)str.c_str() ;
+		//		const char* sstr = sstrbuf ;
+		char* dstr = (char*)dstrbuf ;
+		size_t size1 = str.size()+1;
+		size_t size2 = sizeof(dstrbuf)/sizeof(dstrbuf[0]);
+		iconv(cd, &sstr, &size1,&dstr,&size2);
+		*((wchar_t* )dstr) = L'\0';
+		/*wstring */wstr = dstrbuf;
+#else
+
+		convertMultiByteToWideChar(str.c_str(), wstr);
+#endif
+		vector<wstring> v;
+		trim(wstr);
+		if(starts_with(wstr, "#")) continue;
+		split(v, wstr, is_space());
+		if(v.size() != 2) continue;
+		vec.push_back(pair<wstring,wstring>(v[1],v[0]));
+	}
+	return vec;
+}
 const multimap<wstring,wstring>& init(const char* filename)
 {
 	setlocale(LC_ALL, "");
@@ -118,4 +163,30 @@ bool match(vector<wstring> v, wstring s)
 		if(*i == s) {return true;}
 	}
 	return false;
+}
+//vector<KanaYomiPtr> KanaSet::searchByKana(const wstring &kana)
+//vector<KanaYomi> KanaSet::searchByKana(const wstring &kana)
+//{
+//	vector<KanaYomi> hit;
+//	if(kanaset.empty())
+//		return hit;
+//	kanaset_kana_index &kana_index = kanaset.get<by_kana>();
+//	kanaset_kana_index::const_iterator last = kana_index.upper_bound(kana);
+//	
+//	for(kanaset_kana_index::const_iterator itr = kana_index.lower_bound(kana);
+//			itr != last; ++itr) {
+//		hit.push_back(*itr);
+//	}
+//	return hit;
+//}
+KanaYomi KanaSet::searchByYomi(const wstring &yomi)
+{
+	KanaYomi entry;
+	if(kanaset.empty())
+		return entry;
+	kanaset_yomi_index &yomi_index = kanaset.get<by_yomi>();
+	kanaset_yomi_index::const_iterator itr = yomi_index.find(yomi);
+	if(itr == yomi_index.end())
+		return entry;
+	return *itr;
 }
