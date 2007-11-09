@@ -92,6 +92,50 @@ const vector<pair<wstring,wstring> >& initvec(const char* filename)
 	}
 	return vec;
 }
+void initset(const char* filename, KanaSet& set)
+{
+	setlocale(LC_ALL, "");
+//	static multimap<wstring,wstring> hash;
+	ifstream dat(filename);
+	wstring wstr;
+	string str;
+	if(!dat.is_open()) {
+		exit(512);
+
+	}
+	//locale::global(locale(""));
+	//dat.imbue(locale(""));
+	//iconv_t cd = iconv_open("WCHAR_T", "UTF8");
+#ifndef WIN32
+	iconv_t cd = iconv_open("WCHAR_T", "CP932");
+#endif
+
+	while(getline(dat,str)) 
+	{
+#ifndef WIN32
+		wchar_t dstrbuf[512] ;
+		char* sstr = (char*)str.c_str() ;
+		//		const char* sstr = sstrbuf ;
+		char* dstr = (char*)dstrbuf ;
+		size_t size1 = str.size()+1;
+		size_t size2 = sizeof(dstrbuf)/sizeof(dstrbuf[0]);
+		iconv(cd, &sstr, &size1,&dstr,&size2);
+		*((wchar_t* )dstr) = L'\0';
+		/*wstring */wstr = dstrbuf;
+#else
+
+		convertMultiByteToWideChar(str.c_str(), wstr);
+#endif
+		vector<wstring> v;
+		trim(wstr);
+		if(starts_with(wstr, "#")) continue;
+		split(v, wstr, is_space());
+		if(v.size() != 2) continue;
+		//hash.insert(pair<wstring,wstring>(v[1],v[0]));
+		set.push(KanaYomi(v[1],v[0]));
+	}
+//	return hash;
+}
 const multimap<wstring,wstring>& init(const char* filename)
 {
 	setlocale(LC_ALL, "");
@@ -179,14 +223,14 @@ bool match(vector<wstring> v, wstring s)
 //	}
 //	return hit;
 //}
-KanaYomi KanaSet::searchByYomi(const wstring &yomi)
-{
-	KanaYomi entry;
-	if(kanaset.empty())
-		return entry;
-	kanaset_yomi_index &yomi_index = kanaset.get<by_yomi>();
-	kanaset_yomi_index::const_iterator itr = yomi_index.find(yomi);
-	if(itr == yomi_index.end())
-		return entry;
-	return *itr;
-}
+//KanaYomi KanaSet::searchByYomi(const wstring &yomi)
+//{
+//	KanaYomi entry;
+//	if(kanaset.empty())
+//		return entry;
+//	kanaset_yomi_index &yomi_index = kanaset.get<by_yomi>();
+//	kanaset_yomi_index::const_iterator itr = yomi_index.find(yomi);
+//	if(itr == yomi_index.end())
+//		return entry;
+//	return *itr;
+//}
