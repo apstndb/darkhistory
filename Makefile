@@ -1,6 +1,6 @@
 LDLIBS = -lstdc++ -lglfw -lGLU -lftgl
 CPPFLAGS = -Wall -pedantic -g `freetype-config --cflags`
-all: darkhistory mytest
+all: darkhistory mytest test main
 darkhistory: darkhistory.o mylib.o mygllib.o
 mytest: mytest.o mylib.o
 main: main.o mylib.o

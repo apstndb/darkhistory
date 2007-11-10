@@ -214,16 +214,19 @@ wstring KanaSet::to_kana(const wstring& yomi)
 	if(!yomi.size()) {
 		return yomi;
 	} else {
+		wcout << yomi << endl;
 		wstring kana;
 		kanaset_yomi_index& index = kanaset.get<by_yomi>();
 		kanaset_yomi_index::iterator iter;
 		for(unsigned int i = 1; i <= yomi.size();i++) {
-			iter = index.find(yomi.substr(0,1));
+			iter = index.find(yomi.substr(0,i));
 			if(iter != index.end())
-				return iter->kana + to_kana(yomi.substr(1));
+				return iter->kana + to_kana(yomi.substr(i));
 		}
 	}
-	return yomi;
+	return yomi[0] + to_kana(yomi.substr(1));;
+	//wstring temp = to_kana(yomi.substr(1));
+	//return yomi[0] + to_kana(yomi.substr(1));;
 }
 //vector<KanaYomiPtr> KanaSet::searchByKana(const wstring &kana)
 //vector<KanaYomi> KanaSet::searchByKana(const wstring &kana)
