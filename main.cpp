@@ -11,6 +11,7 @@
 #include "mylib.h"
 
 using namespace std;
+using namespace boost;
 
 class word {
 	wstring str;
@@ -39,10 +40,27 @@ class word {
 	{
 		wcout << str << endl;
 	}
-	inline void printkana(KanaSet& set)
+	void printkana(KanaSet& set)
 	{
-		
-		wcout << str << endl;
+		wcout << set.to_kana(input) << endl;
+		return;
+		wstring temp = input;
+		//wcout << input << endl;
+		wcout << temp << endl;
+		for(unsigned int i = 1; i <= temp.size();i++)
+		{
+			wcout << wformat(L"%1% %2%") % i % temp.substr(0,i) << endl;
+			KanaSet::kanaset_yomi_index& index = set.kanaset.get<by_yomi>();
+			KanaSet::kanaset_yomi_index::iterator hoge = index.find(temp.substr(0,i));
+			if(hoge != index.end()) {
+				wcout << hoge->kana << endl;
+				temp = temp.substr(i);
+				i=1;
+			}
+			//wcout << (index.find(input.substr(0,i)))->kana << endl ;
+	//		KanaSet::kanaset_yomi_index::iterator iter = index.if_find(str.substr(0,i));
+//			wcout << iter->yomi << endl;
+		}
 	}
 	inline void printinput()
 	{
@@ -105,7 +123,8 @@ void Draw( KanaSet& set )
 	while(!global_queue.empty()) { 
 		tanuki.add(global_queue.front());
 		global_queue.pop();
-		tanuki.printinput();
+		//tanuki.printinput();
+		tanuki.printkana(set);
 	}
 
 	//glEnable( GL_TEXTURE_2D );
@@ -113,7 +132,7 @@ void Draw( KanaSet& set )
 		flag = true;
 		tanuki.backspace();
 
-		tanuki.printinput();
+		tanuki.printkana(set);
 		//  settime();
 	}
 	if(glfwGetKey(GLFW_KEY_BACKSPACE)==GLFW_RELEASE) {flag=false;}
@@ -187,8 +206,12 @@ int main( int argc, char **argv )
 	KanaSet set;
 	setlocale(LC_ALL, "");
 	initset("roma2hira.dat", set);
+	
+	
 	{
+		
 		using namespace boost;
+		/*
 		{
 			KanaSet::kanaset_fifo_index& index = set.kanaset.get<by_fifo>();
 			BOOST_FOREACH( const KanaYomi& s, index )
@@ -204,7 +227,9 @@ int main( int argc, char **argv )
 			BOOST_FOREACH( const KanaYomi& s, index )
 				wcout << wformat(L"%1% %2%") % s.kana % s.yomi << endl;
 		}
+		*/
 	}
+	
 
 	// Initialize GLFW
 	glfwInit();

@@ -35,12 +35,23 @@ struct by_kana {};
 struct by_yomi {};
 struct by_fifo {};
 typedef boost::shared_ptr<const KanaYomi> KanaYomiPtr;
+struct kanayomi_comparator {
+	bool operator()(const KanaYomi& lhs, const KanaYomi& rhs) const {
+		return lhs.yomi < rhs.yomi;
+	}
+	bool operator()(const KanaYomi& lhs, const std::wstring& rhs) const {
+		return lhs.yomi < rhs;
+	}
+	bool operator()(const std::wstring& lhs, const KanaYomi& rhs) const {
+		return lhs < rhs.yomi;
+	}
+};
 struct KanaSet {
 	typedef multi_index_container<
 		KanaYomi,
 		indexed_by<
 			sequenced<tag<by_fifo> >,
-		ordered_unique<tag<by_yomi>,identity<KanaYomi> >,
+		ordered_unique<tag<by_yomi>,identity<KanaYomi>,kanayomi_comparator >,
 		ordered_non_unique<
 			tag<by_kana>,
 //		mem_fun<KanaYomi, wstring&, &KanaYomi::getKana> >
@@ -48,14 +59,15 @@ struct KanaSet {
 			>
 			> kanaset_set_t;
 	kanaset_set_t kanaset;
+//	public:
 	typedef kanaset_set_t::index<by_kana>::type kanaset_kana_index;
 	typedef kanaset_set_t::index<by_yomi>::type kanaset_yomi_index;
 	typedef kanaset_set_t::index<by_fifo>::type kanaset_fifo_index;
-//	public:
-	KanaYomi searchByYomi(const wstring &yomi);
+	//KanaYomi searchByYomi(const wstring &yomi);
 	//      vector<KanaYomi> searchByKana(const wstring &Kana);
 
-		void push(const KanaYomi& entry) { kanaset.push_back(entry);};
+	wstring to_kana(const wstring&);
+	inline void push(const KanaYomi& entry) { kanaset.push_back(entry);};
 	//	KanaYomi front() const;
 	//	void pop();
 };

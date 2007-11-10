@@ -208,6 +208,23 @@ bool match(vector<wstring> v, wstring s)
 	}
 	return false;
 }
+
+wstring KanaSet::to_kana(const wstring& yomi)
+{
+	if(!yomi.size()) {
+		return yomi;
+	} else {
+		wstring kana;
+		kanaset_yomi_index& index = kanaset.get<by_yomi>();
+		kanaset_yomi_index::iterator iter;
+		for(unsigned int i = 1; i <= yomi.size();i++) {
+			iter = index.find(yomi.substr(0,1));
+			if(iter != index.end())
+				return iter->kana + to_kana(yomi.substr(1));
+		}
+	}
+	return yomi;
+}
 //vector<KanaYomiPtr> KanaSet::searchByKana(const wstring &kana)
 //vector<KanaYomi> KanaSet::searchByKana(const wstring &kana)
 //{
