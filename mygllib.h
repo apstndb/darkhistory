@@ -1,7 +1,7 @@
 #include <vector>
 #include <map>
 #include <string>
-#include <FTGL/FTGLPolygonFont.h>
+#include <FTGL/FTFont.h>
 using std::wstring;
 using std::multimap;
 using std::vector;

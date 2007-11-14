@@ -1,90 +1,102 @@
-#include <stdlib.h>    // For malloc() etc.
-#include <stdio.h>    // For printf(), fopen() etc.
+//#include <stdlib.h>    // For malloc() etc.
+//#include <stdio.h>    // For printf(), fopen() etc.
 #include <math.h>    // For sin(), cos() etc.
 #include <GL/glfw.h>   // For GLFW, OpenGL and GLU
-#include <iostream>
-#include <vector>
-#include <string>
+//#include <iostream>
+//#include <vector>
+//#include <string>
 #include <queue>
-#include <boost/foreach.hpp>
-#include <boost/format.hpp>
+//#include <boost/foreach.hpp>
+//#include <boost/format.hpp>
+//#include <boost/assign.hpp>
+//#include <FTGL/FTGLExtrdFont.h>
+#include <FTGL/FTGLPolygonFont.h>
 #include "mylib.h"
+#include "mygllib.h"
+#include "input.hpp"
 
+#define SIZE 1.0
+#define FONT "/usr/share/fonts/WinFont/msgothic.ttc"
 using namespace std;
 using namespace boost;
 
-class word {
-	wstring str;
-	wstring input;
-	public:
-	word(const wchar_t*& ws)
-		:str(ws)
-	{
-	}
-	word(const wstring& ws)
-		:str(ws)
-	{
-	}
-	word()
-	{
-	}
-	inline void backspace()
-	{
-		if(input.size()) input.resize(input.size()-1);
-	}
-	inline void add(wchar_t c)
-	{
-		input += c;
-	}
-	inline void print()
-	{
-		wcout << str << endl;
-	}
-	void printkana(KanaSet& set)
-	{
-		wcout << set.to_kana(input) << endl;
-		return;
-		wstring temp = input;
-		//wcout << input << endl;
-		wcout << temp << endl;
-		for(unsigned int i = 1; i <= temp.size();i++)
-		{
-			wcout << wformat(L"%1% %2%") % i % temp.substr(0,i) << endl;
-			KanaSet::kanaset_yomi_index& index = set.kanaset.get<by_yomi>();
-			KanaSet::kanaset_yomi_index::iterator hoge = index.find(temp.substr(0,i));
-			if(hoge != index.end()) {
-				wcout << hoge->kana << endl;
-				temp = temp.substr(i);
-				i=1;
-			}
-			//wcout << (index.find(input.substr(0,i)))->kana << endl ;
-	//		KanaSet::kanaset_yomi_index::iterator iter = index.if_find(str.substr(0,i));
-//			wcout << iter->yomi << endl;
-		}
-	}
-	inline void printinput()
-	{
-		wcout << input << endl;
-	}
+void GLFWCALL keyinput( int, int );
+void GLFWCALL charinput( int, int );
 
-};
-queue<wchar_t> global_queue;
-bool flag = false;
-double date = 0.0;
+void setUpLighting()
+{
+	// Set up lighting.
+	float light1_ambient[4]  = { 1.0, 1.0, 1.0, 1.0 };
+	float light1_diffuse[4]  = { 1.0, 0.9, 0.9, 1.0 };
+	float light1_specular[4] = { 1.0, 0.7, 0.7, 1.0 };
+	float light1_position[4] = { -1.0, 1.0, 1.0, 0.0 };
+	glLightfv(GL_LIGHT1, GL_AMBIENT,  light1_ambient);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE,  light1_diffuse);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, light1_specular);
+	glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
+	glEnable(GL_LIGHT1);
+
+	float light2_ambient[4]  = { 0.2, 0.2, 0.2, 1.0 };
+	float light2_diffuse[4]  = { 0.9, 0.9, 0.9, 1.0 };
+	float light2_specular[4] = { 0.7, 0.7, 0.7, 1.0 };
+	float light2_position[4] = { 1.0, -1.0, -1.0, 0.0 };
+	glLightfv(GL_LIGHT2, GL_AMBIENT,  light2_ambient);
+	glLightfv(GL_LIGHT2, GL_DIFFUSE,  light2_diffuse);
+	glLightfv(GL_LIGHT2, GL_SPECULAR, light2_specular);
+	glLightfv(GL_LIGHT2, GL_POSITION, light2_position);
+	//   glEnable(GL_LIGHT2);
+
+	float front_emission[4] = { 0.3, 0.2, 0.1, 0.0 };
+	float front_ambient[4]  = { 0.2, 0.2, 0.2, 0.0 };
+	float front_diffuse[4]  = { 0.95, 0.95, 0.8, 0.0 };
+	float front_specular[4] = { 0.6, 0.6, 0.6, 0.0 };
+	glMaterialfv(GL_FRONT, GL_EMISSION, front_emission);
+	glMaterialfv(GL_FRONT, GL_AMBIENT, front_ambient);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, front_diffuse);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, front_specular);
+	glMaterialf(GL_FRONT, GL_SHININESS, 16.0);
+	glColor4fv(front_diffuse);
+
+	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
+	glColorMaterial(GL_FRONT, GL_DIFFUSE);
+	glEnable(GL_COLOR_MATERIAL);
+
+	glEnable(GL_LIGHTING);
+}
+
+queue<int> global_queue;
 enum mode {
-	MODE_TITLE,
 	MODE_LOGO,
+	MODE_TITLE,
 	MODE_GAME
 };
+mode current;
+void changemode(mode next)
+{
+	//	glfwSetCharCallback(NULL);
+	//	glfwSetKeyCallback(NULL);
+	glfwSetCharCallback(charinput);
+	glfwSetKeyCallback(keyinput);
+	switch(current = next) {
+		case MODE_LOGO:
+			break;
+		case MODE_TITLE:
+			break;
+		case MODE_GAME:
+			break;
+		default:
+			break;
+	}
+}
 //========================================================================
 // Textures
 //========================================================================
 
 enum tex_enum { TEX_TITLE, TEX_MENU, TEX_WINNER1, TEX_WINNER2, TEX_FIELD };
-//#define NUM_TEXTURES 6
 #define NUM_TEXTURES 1
 
 // Texture names
+
 const char * tex_name[ NUM_TEXTURES ] = {
 	//    "pong3d_title.tga",
 	"sofmelogo.tga",
@@ -101,12 +113,26 @@ GLuint tex_id[ NUM_TEXTURES ];
 
 void LoadTextures( void );
 
+void GLFWCALL keyinput( int key, int action )
+{
+	/*wcout << L"keyinput: " 
+	  << ((action==GLFW_PRESS)?L"PRESS":L"RELEASE") << L' '  
+	  << wformat(L"%1$#x") % key << endl;*/
+	if(action == GLFW_PRESS)
+	{
+		if(key==GLFW_KEY_TAB) changemode(MODE_GAME);
+		if(key==GLFW_KEY_ESC) global_queue.push(key),changemode(MODE_LOGO);
+		if(key==GLFW_KEY_BACKSPACE) global_queue.push(key);
+	}
+}
 void GLFWCALL charinput( int character, int action )
 {
+	/*wcout << L"charinput: " 
+	  << ((action==GLFW_PRESS)?L"PRESS":L"RELEASE") << L' '  
+	  << (wchar_t)character << endl;*/
 	if(action == GLFW_PRESS) 
 	{
-		global_queue.push((wchar_t)character);
-		//  settime();
+		global_queue.push(character);
 	}
 }
 
@@ -114,28 +140,41 @@ void GLFWCALL charinput( int character, int action )
 // Draw() - Main OpenGL drawing function that is called each frame
 //----------------------------------------------------------------------
 
-void Draw( KanaSet& set )
+void Draw( KanaSet* set ,FTFont* font)
 {
 
 	int    width, height;  // Window dimensions
 	double t;      // Time (in seconds)
-	static word tanuki(wstring(L"ほげほげほげら"));
+	static input tanuki;
 	while(!global_queue.empty()) { 
-		tanuki.add(global_queue.front());
+		tanuki(global_queue.front());
+		tanuki.regen_kana(set);
 		global_queue.pop();
-		//tanuki.printinput();
-		tanuki.printkana(set);
+
+		//wcout << tanuki.get_kana() << endl;
 	}
 
 	//glEnable( GL_TEXTURE_2D );
-	if(!flag &&glfwGetKey(GLFW_KEY_BACKSPACE)==GLFW_PRESS) { 
-		flag = true;
-		tanuki.backspace();
+	/*switch(glfwGetKey(GLFW_KEY_BACKSPACE)) {
+	  case GLFW_PRESS: 
+	  if(!flag) {
+	  tanuki.backspace();
+	  tanuki.regen_kana(set);
+	  wcout << tanuki.get_kana() << endl;
+	  }
+	  flag=true;
+	  break;
+	  case GLFW_RELEASE:
+	  flag=false;
+	  break;
+	  }
 
-		tanuki.printkana(set);
-		//  settime();
-	}
-	if(glfwGetKey(GLFW_KEY_BACKSPACE)==GLFW_RELEASE) {flag=false;}
+*/
+	//	if(glfwGetKey(GLFW_KEY_ESC)==GLFW_PRESS) { 
+	//		tanuki.clear();
+	//		wcout << tanuki.get_kana() << endl;
+	//		changemode(MODE_LOGO);
+	//	}
 
 	// Get current time
 	t = glfwGetTime();
@@ -150,8 +189,17 @@ void Draw( KanaSet& set )
 	glViewport( 0, 0, width, height );
 
 	// Clear color and depht buffers
-	// glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
-	glClearColor( 1.0f, 1.0f, 1.0f, 0.0f );
+	switch(current) {
+		case MODE_LOGO:
+			glClearColor( 1.0f, 1.0f, 1.0f, 0.0f );
+			break;
+		case MODE_GAME:
+			glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+			break;
+		default:
+			glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+			break;
+	}
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 	// Set up projection matrix
@@ -174,22 +222,36 @@ void Draw( KanaSet& set )
 		 );
 
 	// Here is where actual OpenGL rendering calls would begin...
-	if(t < 6.0) glTranslated(.0,fabs(sin(6.28*t))/(t*t),-5/(t*t*t*t));
+	switch(current) {
+		case MODE_LOGO:
+			glDisable(GL_LIGHTING);
+			glDisable(GL_COLOR_MATERIAL);
+			glDisable(GL_LIGHT1);
+			if(t < 6.0) glTranslated(.0,fabs(sin(6.28*t))/(t*t),-5/(t*t*t*t));
 
-	glScalef(1.5f,1.5f,1.5f);
-	glEnable( GL_TEXTURE_2D );
-	glBindTexture( GL_TEXTURE_2D, tex_id[ TEX_TITLE ] );
-	glBegin(GL_QUADS);
-	glTexCoord2f( 0.0f, 1.0f );
-	glVertex2d(-8.0,1.0);
-	glTexCoord2f( 1.0f, 1.0f );
-	glVertex2d(8.0,1.0);
-	glTexCoord2f( 1.0f, 0.0f );
-	glVertex2d(8.0,-1.0);
-	glTexCoord2f( 0.0f, 0.0f );
-	glVertex2d(-8.0,-1.0);
-	glEnd();
-	glDisable( GL_TEXTURE_2D );
+			glScalef(1.5f,1.5f,1.5f);
+			glEnable( GL_TEXTURE_2D );
+			glBindTexture( GL_TEXTURE_2D, tex_id[ TEX_TITLE ] );
+			glBegin(GL_QUADS);
+			glTexCoord2f( 0.0f, 1.0f );
+			glVertex2d(-8.0,1.0);
+			glTexCoord2f( 1.0f, 1.0f );
+			glVertex2d(8.0,1.0);
+			glTexCoord2f( 1.0f, 0.0f );
+			glVertex2d(8.0,-1.0);
+			glTexCoord2f( 0.0f, 0.0f );
+			glVertex2d(-8.0,-1.0);
+			glEnd();
+			glDisable( GL_TEXTURE_2D );
+			break;
+		case MODE_GAME:
+			//setUpLighting();
+			//glTranslatef(-8.0f, 5.0f, 0.0f);
+			glTranslatef(-font->Advance(tanuki.get_kana().c_str())/2, .0f, -5.0f);
+			RenderText(font, tanuki.get_kana() );
+		default:
+			break;
+	}
 
 
 }
@@ -201,35 +263,43 @@ void Draw( KanaSet& set )
 
 int main( int argc, char **argv )
 {
+	//vector<string> tex_name_v = assign::list_of("sofmelogo.tga");
 	int    ok;      // Flag telling if the window was opened
 	int    running;     // Flag telling if the program is running
 	KanaSet set;
+	FTFont *font;
+	//font = new FTGLExtrdFont(FONT);
+	font = new FTGLPolygonFont(FONT);
+	if (font->Error()) exit(1);                        // can't open font file
+	if (!font->FaceSize(SIZE)) exit(1);                // can't set font size
+	font->Depth(1.0);                // can't set font size
+	if (!font->CharMap(ft_encoding_unicode)) exit(1);  // can't set charmap 
 	setlocale(LC_ALL, "");
 	initset("roma2hira.dat", set);
-	
-	
+
+
 	{
-		
+
 		using namespace boost;
 		/*
-		{
-			KanaSet::kanaset_fifo_index& index = set.kanaset.get<by_fifo>();
-			BOOST_FOREACH( const KanaYomi& s, index )
-				wcout << wformat(L"%1% %2%") % s.kana % s.yomi << endl;
-		}
-		{
-			KanaSet::kanaset_kana_index& index = set.kanaset.get<by_kana>();
-			BOOST_FOREACH( const KanaYomi& s, index )
-				wcout << wformat(L"%1% %2%") % s.kana % s.yomi << endl;
-		}
-		{
-			KanaSet::kanaset_yomi_index& index = set.kanaset.get<by_yomi>();
-			BOOST_FOREACH( const KanaYomi& s, index )
-				wcout << wformat(L"%1% %2%") % s.kana % s.yomi << endl;
-		}
-		*/
+		   {
+		   KanaSet::kanaset_fifo_index& index = set.kanaset.get<by_fifo>();
+		   BOOST_FOREACH( const KanaYomi& s, index )
+		   wcout << wformat(L"%1% %2%") % s.kana % s.yomi << endl;
+		   }
+		   {
+		   KanaSet::kanaset_kana_index& index = set.kanaset.get<by_kana>();
+		   BOOST_FOREACH( const KanaYomi& s, index )
+		   wcout << wformat(L"%1% %2%") % s.kana % s.yomi << endl;
+		   }
+		   {
+		   KanaSet::kanaset_yomi_index& index = set.kanaset.get<by_yomi>();
+		   BOOST_FOREACH( const KanaYomi& s, index )
+		   wcout << wformat(L"%1% %2%") % s.kana % s.yomi << endl;
+		   }
+		   */
 	}
-	
+
 
 	// Initialize GLFW
 	glfwInit();
@@ -254,24 +324,29 @@ int main( int argc, char **argv )
 	// Set window title
 	glfwSetWindowTitle("My OpenGL program");
 
-	glfwSetCharCallback(charinput);
+	//glfwSetCharCallback(charinput);
+	changemode(MODE_LOGO);
 
 	// Enable sticky keys
 	glfwEnable(GLFW_STICKY_KEYS);
+	glfwDisable(GLFW_KEY_REPEAT);
+
+	//	glEnable(GL_CULL_FACE);
 
 	LoadTextures();
 	// Main rendering loop
 	do
 	{
 		// Call our rendering function
-		Draw(set);
+		Draw(&set, font);
 
 		// Swap front and back buffers (we use a double buffered display)
 		glfwSwapBuffers();
 
 		// Check if the escape key was pressed, or if the window was closed
-		running = !glfwGetKey( GLFW_KEY_ESC ) &&
-			glfwGetWindowParam( GLFW_OPENED );
+		running = glfwGetWindowParam( GLFW_OPENED );
+		//running = !glfwGetKey( GLFW_KEY_ESC ) &&
+		//	glfwGetWindowParam( GLFW_OPENED );
 	}
 	while( running );
 
@@ -282,10 +357,10 @@ int main( int argc, char **argv )
 	return 0;
 }
 
+
 void LoadTextures( void )
 {
 	int  i;
-
 	// Generate texture objects
 	glGenTextures( NUM_TEXTURES, tex_id );
 

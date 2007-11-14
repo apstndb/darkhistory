@@ -5,14 +5,15 @@
 #include <iconv.h>
 #endif
 #include <boost/algorithm/string.hpp>
-#include <boost/shared_container_iterator.hpp>
+//#include <boost/shared_container_iterator.hpp>
 using std::wifstream;
 using std::ifstream;
 using std::pair;
 using std::string;
 using std::locale;
-using std::wcout;
-using std::cout;
+using std::ostream;
+//using std::wcout;
+//using std::cout;
 using std::endl;
 using namespace boost::algorithm;
 vector<wstring> kana2roma(multimap<wstring,wstring> v, wstring tstr)
@@ -179,7 +180,7 @@ const multimap<wstring,wstring>& init(const char* filename)
 	}
 	return hash;
 }
-vector<wstring> ListMatchPrefix(vector<wstring>& vec,wstring str)
+/*vector<wstring> ListMatchPrefix(vector<wstring>& vec,wstring str)
 {
 	vector<wstring> result;
 	//for(vector<wstring>::iterator i = vec.begin(); i != vec.end();i++)
@@ -188,18 +189,12 @@ vector<wstring> ListMatchPrefix(vector<wstring>& vec,wstring str)
 	{
 		if(ComparePrefix((*i),str)) result.push_back(*i);
 	}
-	return result;
-}
+	return vector<wstring>(result);
+}*/
 bool ComparePrefix(wstring lstr,wstring sstr)
 {
 	return lstr.substr(0,sstr.size())==sstr;
 
-}
-void OutputVector(vector<wstring> v)
-{
-	for(vector<wstring>::iterator i = v.begin(); i != v.end();++i) {
-		wcout << *i << endl;
-	}
 }
 bool match(vector<wstring> v, wstring s)
 {
@@ -214,7 +209,7 @@ wstring KanaSet::to_kana(const wstring& yomi)
 	if(!yomi.size()) {
 		return yomi;
 	} else {
-		wcout << yomi << endl;
+//		wcout << yomi << endl;
 		wstring kana;
 		kanaset_yomi_index& index = kanaset.get<by_yomi>();
 		kanaset_yomi_index::iterator iter;
@@ -224,33 +219,10 @@ wstring KanaSet::to_kana(const wstring& yomi)
 				return iter->kana + to_kana(yomi.substr(i));
 		}
 	}
-	return yomi[0] + to_kana(yomi.substr(1));;
-	//wstring temp = to_kana(yomi.substr(1));
-	//return yomi[0] + to_kana(yomi.substr(1));;
+	if(yomi.size()>1 && yomi[0] == L'n')
+		return L'ん' + to_kana(yomi.substr(1));
+//	else if(yomi[0] == yomi[1]) return L'っ' + to_kana(yomi.substr(1));
+//	else return yomi[0] + to_kana(yomi.substr(1));
+	else return ((yomi[0]==yomi[1])?L'っ':yomi[0]) + to_kana(yomi.substr(1));
+	
 }
-//vector<KanaYomiPtr> KanaSet::searchByKana(const wstring &kana)
-//vector<KanaYomi> KanaSet::searchByKana(const wstring &kana)
-//{
-//	vector<KanaYomi> hit;
-//	if(kanaset.empty())
-//		return hit;
-//	kanaset_kana_index &kana_index = kanaset.get<by_kana>();
-//	kanaset_kana_index::const_iterator last = kana_index.upper_bound(kana);
-//	
-//	for(kanaset_kana_index::const_iterator itr = kana_index.lower_bound(kana);
-//			itr != last; ++itr) {
-//		hit.push_back(*itr);
-//	}
-//	return hit;
-//}
-//KanaYomi KanaSet::searchByYomi(const wstring &yomi)
-//{
-//	KanaYomi entry;
-//	if(kanaset.empty())
-//		return entry;
-//	kanaset_yomi_index &yomi_index = kanaset.get<by_yomi>();
-//	kanaset_yomi_index::const_iterator itr = yomi_index.find(yomi);
-//	if(itr == yomi_index.end())
-//		return entry;
-//	return *itr;
-//}

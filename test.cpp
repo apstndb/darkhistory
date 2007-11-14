@@ -14,7 +14,7 @@ int main(int argc, char** argv)
 	vector<wstring> vec = kana2roma(map, wstr);
 	//OutputVector(ListMatchPrefix(vec ,wstr2));
 	vec = ListMatchPrefix(vec ,wstr2);
-	OutputVector(vec);
+	OutputVector(vec,wcout);
 	wcout << (match(vec,wstr2)?L"match":L"unmatch") << endl;
 	wcout << vec.size() << endl;
 	}

@@ -36,7 +36,7 @@ int main(int argc, char** argv)
 	//wcout << str << flush;
 	//OutputVector(kana2roma(hash,str));
 	vector<wstring> vec = kana2roma(hash,str);
-	OutputVector(ListMatchPrefix(vec,str2));
+	OutputVector(ListMatchPrefix(vec,str2),wcout);
 	//	for(vector<wstring>::iterator i = vec.begin(); i != vec.end();i++)
 	//		{if((*i).substr(0,str2.size())==str2) wcout << *i << endl;}
 	//	wcout << flush;
