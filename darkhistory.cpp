@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <boost/algorithm/string.hpp>
+#include <FTGL/FTGLPolygonFont.h>
 //#include <stdlib.h>    // For malloc() etc.
 ////#include <stdio.h>     // For printf(), fopen() etc.
 //#include <math.h>      // For sin(), cos() etc.

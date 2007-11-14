@@ -14,6 +14,7 @@
 #include "mylib.h"
 #include "mygllib.h"
 #include "input.hpp"
+#include "kanaset.hpp"
 
 #define SIZE 1.0
 #define FONT "/usr/share/fonts/WinFont/msgothic.ttc"

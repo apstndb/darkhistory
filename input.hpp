@@ -1,5 +1,6 @@
 #include <string>
 #include <GL/glfw.h>
+#include "kanaset.hpp"
 class input {
 	wstring buffer;
 	wstring kana;
