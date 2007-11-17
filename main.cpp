@@ -5,24 +5,23 @@
 //#include <iostream>
 //#include <vector>
 //#include <string>
-#include <queue>
+//#include <queue>
 //#include <boost/foreach.hpp>
 //#include <boost/format.hpp>
 //#include <boost/assign.hpp>
-//#include <FTGL/FTGLExtrdFont.h>
-#include <FTGL/FTGLPolygonFont.h>
+#include <FTGL/FTGLExtrdFont.h>
+//#include <FTGL/FTGLPolygonFont.h>
 #include "mylib.h"
 #include "mygllib.h"
 #include "input.hpp"
 #include "kanaset.hpp"
+#include "game.hpp"
 
 #define SIZE 1.0
+#define DEPTH 0.2
 #define FONT "/usr/share/fonts/WinFont/msgothic.ttc"
 using namespace std;
 using namespace boost;
-
-void GLFWCALL keyinput( int, int );
-void GLFWCALL charinput( int, int );
 
 void setUpLighting()
 {
@@ -45,7 +44,7 @@ void setUpLighting()
 	glLightfv(GL_LIGHT2, GL_DIFFUSE,  light2_diffuse);
 	glLightfv(GL_LIGHT2, GL_SPECULAR, light2_specular);
 	glLightfv(GL_LIGHT2, GL_POSITION, light2_position);
-	//   glEnable(GL_LIGHT2);
+	// glEnable(GL_LIGHT2);
 
 	float front_emission[4] = { 0.3, 0.2, 0.1, 0.0 };
 	float front_ambient[4]  = { 0.2, 0.2, 0.2, 0.0 };
@@ -65,30 +64,6 @@ void setUpLighting()
 	glEnable(GL_LIGHTING);
 }
 
-queue<int> global_queue;
-enum mode {
-	MODE_LOGO,
-	MODE_TITLE,
-	MODE_GAME
-};
-mode current;
-void changemode(mode next)
-{
-	//	glfwSetCharCallback(NULL);
-	//	glfwSetKeyCallback(NULL);
-	glfwSetCharCallback(charinput);
-	glfwSetKeyCallback(keyinput);
-	switch(current = next) {
-		case MODE_LOGO:
-			break;
-		case MODE_TITLE:
-			break;
-		case MODE_GAME:
-			break;
-		default:
-			break;
-	}
-}
 //========================================================================
 // Textures
 //========================================================================
@@ -114,28 +89,6 @@ GLuint tex_id[ NUM_TEXTURES ];
 
 void LoadTextures( void );
 
-void GLFWCALL keyinput( int key, int action )
-{
-	/*wcout << L"keyinput: " 
-	  << ((action==GLFW_PRESS)?L"PRESS":L"RELEASE") << L' '  
-	  << wformat(L"%1$#x") % key << endl;*/
-	if(action == GLFW_PRESS)
-	{
-		if(key==GLFW_KEY_TAB) changemode(MODE_GAME);
-		if(key==GLFW_KEY_ESC) global_queue.push(key),changemode(MODE_LOGO);
-		if(key==GLFW_KEY_BACKSPACE) global_queue.push(key);
-	}
-}
-void GLFWCALL charinput( int character, int action )
-{
-	/*wcout << L"charinput: " 
-	  << ((action==GLFW_PRESS)?L"PRESS":L"RELEASE") << L' '  
-	  << (wchar_t)character << endl;*/
-	if(action == GLFW_PRESS) 
-	{
-		global_queue.push(character);
-	}
-}
 
 //----------------------------------------------------------------------
 // Draw() - Main OpenGL drawing function that is called each frame
@@ -147,35 +100,13 @@ void Draw( KanaSet* set ,FTFont* font)
 	int    width, height;  // Window dimensions
 	double t;      // Time (in seconds)
 	static input tanuki;
-	while(!global_queue.empty()) { 
-		tanuki(global_queue.front());
+	while(!game::event_is_empty()) { 
+		tanuki(game::pop_event());
 		tanuki.regen_kana(set);
-		global_queue.pop();
 
 		//wcout << tanuki.get_kana() << endl;
 	}
 
-	//glEnable( GL_TEXTURE_2D );
-	/*switch(glfwGetKey(GLFW_KEY_BACKSPACE)) {
-	  case GLFW_PRESS: 
-	  if(!flag) {
-	  tanuki.backspace();
-	  tanuki.regen_kana(set);
-	  wcout << tanuki.get_kana() << endl;
-	  }
-	  flag=true;
-	  break;
-	  case GLFW_RELEASE:
-	  flag=false;
-	  break;
-	  }
-
-*/
-	//	if(glfwGetKey(GLFW_KEY_ESC)==GLFW_PRESS) { 
-	//		tanuki.clear();
-	//		wcout << tanuki.get_kana() << endl;
-	//		changemode(MODE_LOGO);
-	//	}
 
 	// Get current time
 	t = glfwGetTime();
@@ -190,9 +121,12 @@ void Draw( KanaSet* set ,FTFont* font)
 	glViewport( 0, 0, width, height );
 
 	// Clear color and depht buffers
-	switch(current) {
+	switch(game::get_mode()) {
 		case MODE_LOGO:
 			glClearColor( 1.0f, 1.0f, 1.0f, 0.0f );
+			break;
+		case MODE_TITLE:
+			glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 			break;
 		case MODE_GAME:
 			glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
@@ -223,14 +157,15 @@ void Draw( KanaSet* set ,FTFont* font)
 		 );
 
 	// Here is where actual OpenGL rendering calls would begin...
-	switch(current) {
+	switch(game::get_mode()) {
 		case MODE_LOGO:
 			glDisable(GL_LIGHTING);
 			glDisable(GL_COLOR_MATERIAL);
 			glDisable(GL_LIGHT1);
-			if(t < 6.0) glTranslated(.0,fabs(sin(6.28*t))/(t*t),-5/(t*t*t*t));
+			if(t < 6.0) glTranslated(.0,fabs(sin(6.28*t))/(t*t),-3/(t*t*t*t));
 
 			glScalef(1.5f,1.5f,1.5f);
+			glColor4f(1.0, 1.0, 1.0, 0.0);
 			glEnable( GL_TEXTURE_2D );
 			glBindTexture( GL_TEXTURE_2D, tex_id[ TEX_TITLE ] );
 			glBegin(GL_QUADS);
@@ -245,8 +180,15 @@ void Draw( KanaSet* set ,FTFont* font)
 			glEnd();
 			glDisable( GL_TEXTURE_2D );
 			break;
+		case MODE_TITLE:
+			setUpLighting();
+			font->FaceSize(3.0);
+			glTranslatef(-font->Advance(L"タイピング黒歴史")/2, .0f, -5.0f);
+			RenderText(font, L"タイピング黒歴史" );
+			font->FaceSize(SIZE);
+
 		case MODE_GAME:
-			//setUpLighting();
+			setUpLighting();
 			//glTranslatef(-8.0f, 5.0f, 0.0f);
 			glTranslatef(-font->Advance(tanuki.get_kana().c_str())/2, .0f, -5.0f);
 			RenderText(font, tanuki.get_kana() );
@@ -269,12 +211,12 @@ int main( int argc, char **argv )
 	int    running;     // Flag telling if the program is running
 	KanaSet set;
 	FTFont *font;
-	//font = new FTGLExtrdFont(FONT);
-	font = new FTGLPolygonFont(FONT);
-	if (font->Error()) exit(1);                        // can't open font file
-	if (!font->FaceSize(SIZE)) exit(1);                // can't set font size
-	font->Depth(1.0);                // can't set font size
-	if (!font->CharMap(ft_encoding_unicode)) exit(1);  // can't set charmap 
+	font = new FTGLExtrdFont(FONT);
+	//font = new FTGLPolygonFont(FONT);
+	if (font->Error()) exit(1);			// can't open font file
+	if (!font->FaceSize(SIZE)) exit(1);		// can't set font size
+	font->Depth(DEPTH);
+	if (!font->CharMap(ft_encoding_unicode)) exit(1);// can't set charmap 
 	setlocale(LC_ALL, "");
 	initset("roma2hira.dat", set);
 
@@ -326,7 +268,7 @@ int main( int argc, char **argv )
 	glfwSetWindowTitle("My OpenGL program");
 
 	//glfwSetCharCallback(charinput);
-	changemode(MODE_LOGO);
+	game::set_mode(MODE_LOGO);
 
 	// Enable sticky keys
 	glfwEnable(GLFW_STICKY_KEYS);

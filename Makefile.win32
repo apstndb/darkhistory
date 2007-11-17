@@ -6,7 +6,7 @@ CXX = $(ARCH)-g++
 #LD = $(ARCH)-ld
 LIBS = $(libdir)/glfw.bin.WIN32/lib-mingw/libglfw.a $(libdir)/ftgl/libftgl.a $(libdir)/freetype/lib/libfreetype.dll.a
 LDLIBS = $(LIBS) -lstdc++ -lglu32 -lopengl32#-lglfw -lGLU -lftgl
-CXXFLAGS = -Wall -pedantic -g `freetype-config --cflags` -I/home/gama/mingw/lib/boost_1_34_1 -I$(libdir)/ftgl -I$(libdir)/freetype/include -I$(libdir)/glfw.bin.WIN32/include
-CFLAGS = $(CFLAGS)
+CFLAGS = -Wall -g `freetype-config --cflags`
+CXXFLAGS = $(CFLAGS) -I/home/gama/mingw/lib/boost_1_34_1 -I$(libdir)/ftgl -I$(libdir)/freetype/include -I$(libdir)/glfw.bin.WIN32/include
 darkhistory.exe: darkhistory.cpp mylib.cpp mygllib.cpp
 	$(CXX) $(CXXFLAGS) $+ $(LDLIBS) -o $@

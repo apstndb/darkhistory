@@ -77,3 +77,13 @@ const multimap<wstring,wstring>& init(const char* filename)
 	}
 	return hash;
 }
+void convertMultiByteToWideChar(const char* pStrMultiByte, std::wstring& rStrWideChar)
+{
+	size_t numWCharsNeeded =  ::mbstowcs(NULL, pStrMultiByte, 0);
+	wchar_t* pStrWChar = new wchar_t[numWCharsNeeded + 1];
+	size_t numWCharsConverted =::mbstowcs(pStrWChar, pStrMultiByte, numWCharsNeeded);
+	pStrWChar[numWCharsConverted] = L'\0';
+
+	rStrWideChar = pStrWChar;
+	delete[] pStrWChar;
+}

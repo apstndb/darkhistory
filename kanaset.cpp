@@ -2,6 +2,7 @@
 #include <vector>
 #include <boost/algorithm/string.hpp>
 #include "kanaset.hpp"
+#include "mylib.h"
 using namespace std;
 using namespace boost::algorithm;
 void initset(const char* filename, KanaSet& set)
@@ -42,7 +43,7 @@ void initset(const char* filename, KanaSet& set)
 		trim(wstr);
 		if(starts_with(wstr, "#")) continue;
 		split(v, wstr, is_space());
-		if(v.size() != 2) continue;
+		if(2 <= v.size()) continue;
 		//hash.insert(pair<wstring,wstring>(v[1],v[0]));
 		set.push(KanaYomi(v[1],v[0]));
 	}
