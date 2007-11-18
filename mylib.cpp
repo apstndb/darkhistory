@@ -5,14 +5,14 @@
 #include <iconv.h>
 #endif
 #include <boost/algorithm/string.hpp>
-using std::ifstream;
-using std::pair;
-using std::string;
+//using std::ifstream;
+//using std::pair;
+//using std::string;
 using std::wstring;
-using std::multimap;
-using std::vector;
-using namespace boost::algorithm;
-vector<wstring> kana2roma(multimap<wstring,wstring> v, wstring tstr)
+//using std::multimap;
+//using std::vector;
+//using namespace boost::algorithm;
+/*vector<wstring> kana2roma(multimap<wstring,wstring> v, wstring tstr)
 {
 	vector<wstring> result;
 
@@ -77,6 +77,7 @@ const multimap<wstring,wstring>& init(const char* filename)
 	}
 	return hash;
 }
+*/
 void convertMultiByteToWideChar(const char* pStrMultiByte, std::wstring& rStrWideChar)
 {
 	size_t numWCharsNeeded =  ::mbstowcs(NULL, pStrMultiByte, 0);

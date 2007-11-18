@@ -1,6 +1,6 @@
 //#include <stdlib.h>    // For malloc() etc.
 //#include <stdio.h>    // For printf(), fopen() etc.
-#include <math.h>    // For sin(), cos() etc.
+#include <cmath>    // For sin(), cos() etc.
 #include <GL/glfw.h>   // For GLFW, OpenGL and GLU
 //#include <iostream>
 //#include <vector>
@@ -17,9 +17,9 @@
 #include "kanaset.hpp"
 #include "game.hpp"
 
-#define SIZE 1.0
-#define DEPTH 0.2
-#define FONT "/usr/share/fonts/WinFont/msgothic.ttc"
+//#define SIZE 1.0
+//#define DEPTH 0.2
+//#define FONT "/usr/share/fonts/WinFont/msgothic.ttc"
 using namespace std;
 using namespace boost;
 
@@ -94,7 +94,8 @@ void LoadTextures( void );
 // Draw() - Main OpenGL drawing function that is called each frame
 //----------------------------------------------------------------------
 
-void Draw( KanaSet* set ,FTFont* font)
+//void Draw( KanaSet* set ,FTFont* font)
+void Draw( KanaSet* set)
 {
 
 	int    width, height;  // Window dimensions
@@ -182,16 +183,23 @@ void Draw( KanaSet* set ,FTFont* font)
 			break;
 		case MODE_TITLE:
 			setUpLighting();
-			font->FaceSize(3.0);
-			glTranslatef(-font->Advance(L"タイピング黒歴史")/2, .0f, -5.0f);
-			RenderText(font, L"タイピング黒歴史" );
-			font->FaceSize(SIZE);
+			//game::font->FaceSize(1.0);
+			glRotatef(t*360 ,0.0, 1.0, 0.0);
+			glTranslatef(-game::font->Advance(L"タイピング黒歴史")/2, .0f, .0f);
+			//RenderText(game::font, L"タイピング黒歴史" );
+			//RenderText(game::font, L"タイピング黒歴史" );
+			//RenderText(game::font, L"タイピング黒歴史" );
+			game::font->Render(L"タイピング黒歴史");
+			//font->FaceSize(SIZE);
+			break;
 
 		case MODE_GAME:
 			setUpLighting();
 			//glTranslatef(-8.0f, 5.0f, 0.0f);
-			glTranslatef(-font->Advance(tanuki.get_kana().c_str())/2, .0f, -5.0f);
-			RenderText(font, tanuki.get_kana() );
+			glTranslatef(-game::font->Advance(tanuki.get_kana().c_str())/2, .0f, -5.0f);
+			game::font->Render(tanuki.get_kana().c_str());
+			//RenderText(game::font, tanuki.get_kana() );
+			break;
 		default:
 			break;
 	}
@@ -209,16 +217,15 @@ int main( int argc, char **argv )
 	//vector<string> tex_name_v = assign::list_of("sofmelogo.tga");
 	int    ok;      // Flag telling if the window was opened
 	int    running;     // Flag telling if the program is running
-	KanaSet set;
-	FTFont *font;
-	font = new FTGLExtrdFont(FONT);
-	//font = new FTGLPolygonFont(FONT);
-	if (font->Error()) exit(1);			// can't open font file
-	if (!font->FaceSize(SIZE)) exit(1);		// can't set font size
-	font->Depth(DEPTH);
-	if (!font->CharMap(ft_encoding_unicode)) exit(1);// can't set charmap 
+//	FTFont *font;
+//	font = new FTGLExtrdFont(FONT);
+//	//font = new FTGLPolygonFont(FONT);
+//	if (font->Error()) exit(1);			// can't open font file
+//	if (!font->FaceSize(SIZE)) exit(1);		// can't set font size
+//	font->Depth(DEPTH);
+//	if (!font->CharMap(ft_encoding_unicode)) exit(1);// can't set charmap 
 	setlocale(LC_ALL, "");
-	initset("roma2hira.dat", set);
+	KanaSet set("roma2hira.dat");
 
 
 	{
@@ -271,7 +278,7 @@ int main( int argc, char **argv )
 	game::set_mode(MODE_LOGO);
 
 	// Enable sticky keys
-	glfwEnable(GLFW_STICKY_KEYS);
+	//glfwEnable(GLFW_STICKY_KEYS);
 	glfwDisable(GLFW_KEY_REPEAT);
 
 	//	glEnable(GL_CULL_FACE);
@@ -281,7 +288,7 @@ int main( int argc, char **argv )
 	do
 	{
 		// Call our rendering function
-		Draw(&set, font);
+		Draw(&set);
 
 		// Swap front and back buffers (we use a double buffered display)
 		glfwSwapBuffers();

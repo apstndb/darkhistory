@@ -12,8 +12,8 @@ struct KanaYomi {
 	bool operator<(const KanaYomi& r) const {
 		return yomi < r.yomi;
 	}
-	KanaYomi(std::wstring _kana, std::wstring _yomi):
-	kana(_kana),yomi(_yomi)
+	KanaYomi(std::wstring& kana_, std::wstring& yomi_)
+		: kana(kana_),yomi(yomi_)
 	{
 	}
 };
@@ -42,7 +42,13 @@ struct yomi_comparator {
 		return lhs < rhs.yomi;
 	}
 };
-struct KanaSet {
+class KanaSet {
+	inline void push(const KanaYomi& entry) {
+		kanaset.push_back(entry);
+		unsigned i=entry.yomi.size();
+		maxchar=(maxchar<i)?i:maxchar;
+	};
+	public:
 	typedef multi_index_container<
 		KanaYomi,
 		indexed_by<
@@ -60,11 +66,6 @@ struct KanaSet {
 	typedef kanaset_set_t::index<by_fifo>::type kanaset_fifo_index;
 
 	std::wstring to_kana(const std::wstring&);
-	inline void push(const KanaYomi& entry) {
-		kanaset.push_back(entry);
-		unsigned i=entry.yomi.size();
-		maxchar=(maxchar<i)?i:maxchar;
-	};
+	KanaSet(const char*); 
 };
-void initset(const char*, KanaSet&); 
 #endif // KANASET_HPP

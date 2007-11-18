@@ -5,7 +5,7 @@
 #include "mylib.h"
 using namespace std;
 using namespace boost::algorithm;
-void initset(const char* filename, KanaSet& set)
+KanaSet::KanaSet(const char* filename)
 {
 	setlocale(LC_ALL, "");
 //	static multimap<wstring,wstring> hash;
@@ -43,18 +43,16 @@ void initset(const char* filename, KanaSet& set)
 		trim(wstr);
 		if(starts_with(wstr, "#")) continue;
 		split(v, wstr, is_space());
-		if(2 <= v.size()) continue;
+		if(2 != v.size()) continue;
 		//hash.insert(pair<wstring,wstring>(v[1],v[0]));
-		set.push(KanaYomi(v[1],v[0]));
+		push(KanaYomi(v[1],v[0]));
 	}
-//	return hash;
 }
 wstring KanaSet::to_kana(const wstring& yomi)
 {
 	if(!yomi.size()) {
 		return yomi;
 	} else {
-//		wcout << yomi << endl;
 		wstring kana;
 		kanaset_yomi_index& index = kanaset.get<by_yomi>();
 		kanaset_yomi_index::iterator iter;
@@ -66,8 +64,6 @@ wstring KanaSet::to_kana(const wstring& yomi)
 	}
 	if(yomi.size()>1 && yomi[0] == L'n')
 		return L'ん' + to_kana(yomi.substr(1));
-//	else if(yomi[0] == yomi[1]) return L'っ' + to_kana(yomi.substr(1));
-//	else return yomi[0] + to_kana(yomi.substr(1));
 	else return ((yomi[0]==yomi[1])?L'っ':yomi[0]) + to_kana(yomi.substr(1));
 	
 }

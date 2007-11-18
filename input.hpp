@@ -2,8 +2,8 @@
 #include <GL/glfw.h>
 #include "kanaset.hpp"
 class input {
-	wstring buffer;
-	wstring kana;
+	std::wstring buffer;
+	std::wstring kana;
 	public:
 	input()
 	{
@@ -35,7 +35,7 @@ class input {
 	{
 		kana=set->to_kana(buffer);
 	}
-	inline const wstring& get_kana() const
+	inline const std::wstring& get_kana() const
 	{
 		return kana;
 	};
