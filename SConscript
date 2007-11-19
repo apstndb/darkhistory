@@ -1,9 +1,9 @@
 #Import( 'expenv' )
-env = Environment( CPPPATH="/usr/include/freetype2" )
+env = Environment( CPPDEFINES=['_UNICODE'], CPPPATH="/usr/include/freetype2" )
 Import( 'tools' )
 #env = expenv
 Tool( tools )(env)
-commonlibs = Split( 'glfw ftgl' )
+commonlibs = Split( 'glfw ftgl boost_filesystem' )
 lib = {}
 lib['crossmingw'] = commonlibs + Split( 'opengl32 glu32')
 lib['gcc'] = commonlibs + Split( 'GLU' )

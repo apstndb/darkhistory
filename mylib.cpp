@@ -88,3 +88,14 @@ void convertMultiByteToWideChar(const char* pStrMultiByte, std::wstring& rStrWid
 	rStrWideChar = pStrWChar;
 	delete[] pStrWChar;
 }
+void convertWideCharToMultiByte(const wchar_t* pStrWideChar, std::string& rStrMultiByte)
+{
+	size_t numCharsNeeded = ::wcstombs(NULL, pStrWideChar, 0);
+	char* pStrMultiByte = new char[numCharsNeeded + 1];
+	size_t numCharsConverted = ::wcstombs(pStrMultiByte, pStrWideChar, numCharsNeeded);
+	pStrMultiByte[numCharsConverted] = '\0';
+
+	rStrMultiByte = pStrMultiByte;
+	delete[] pStrMultiByte;
+}
+

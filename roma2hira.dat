@@ -67,9 +67,11 @@ re	‚ê
 ro	‚ë
 
 wa	‚í
-wi	‚î
+#wi	‚î
+wi	‚¤‚¡
 wu	‚¤
-we	‚ï
+#we	‚ï
+we	‚¤‚¥
 wo	‚ð
 
 
@@ -286,18 +288,30 @@ qyu	‚­‚ã
 qye	‚­‚¥
 qyo	‚­‚å
 
-va	ƒ”‚Ÿ
-vi	ƒ”‚¡
-vu	ƒ”
-ve	ƒ”‚¥
-vo	ƒ”‚§
+va	‚¤J‚Ÿ
+vi	‚¤J‚¡
+vu	‚¤J
+ve	‚¤J‚¥
+vo	‚¤J‚§
+#va	ƒ”‚Ÿ
+#vi	ƒ”‚¡
+#vu	ƒ”
+#ve	ƒ”‚¥
+#vo	ƒ”‚§
+#
+#vya	ƒ”‚á
+#vyi	ƒ”‚¡
+#vyu	ƒ”‚ã
+#vye	ƒ”‚¥
+#vyo	ƒ”‚å
+dya	‚À‚á
+dyi	‚À‚¡
+dyu	‚À‚ã
+dye	‚À‚¥
+dyo	‚À‚å
 
-vya	ƒ”‚á
-vyi	ƒ”‚¡
-vyu	ƒ”‚ã
-vye	ƒ”‚¥
-vyo	ƒ”‚å
 
+who	‚¤‚§
 
 nn	‚ñ
 n'	‚ñ

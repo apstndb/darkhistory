@@ -67,3 +67,8 @@ wstring KanaSet::to_kana(const wstring& yomi)
 	else return ((yomi[0]==yomi[1])?L'っ':yomi[0]) + to_kana(yomi.substr(1));
 	
 }
+
+KanaYomi KanaSet::random()
+{
+
+}

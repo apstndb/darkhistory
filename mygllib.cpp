@@ -2,35 +2,6 @@
 #include <vector>
 #include "game.hpp"
 #include "mygllib.hpp"
-//void RenderMap(FTFont* font, multimap<wstring,wstring> v, wstring tstr)
-//{
-//	//for(multimap<wstring,wstring >::iterator i = v.find(tstr); i != v.end();++i) {
-//	for(multimap<wstring,wstring >::iterator i = v.begin(); i != v.end();++i) {
-//		glPushMatrix();
-//		font->Render((*i).first.c_str());
-//		glPopMatrix();
-//		glTranslatef(.0f, -font->LineHeight(), .0f);
-//	}
-//}
-//void RenderVector(FTFont* font, vector<wstring> v, int num)
-//{
-////	for(vector<wstring>::iterator i = v.begin(); i != v.end();++i,num++) {
-//	for(; num < v.size();num++) {
-//		glPushMatrix();
-//		font->Render(v[num].c_str());
-//		glPopMatrix();
-//		glTranslatef(.0f, -font->LineHeight(), .0f);
-//	}
-//}
-//void RenderVector(FTFont* font, vector<wstring> v)
-//{
-//	for(vector<wstring>::iterator i = v.begin(); i != v.end();++i) {
-//		glPushMatrix();
-//		font->Render((*i).c_str());
-//		glPopMatrix();
-//		glTranslatef(.0f, -font->LineHeight(), .0f);
-//	}
-//}
 void RenderText(FTFont* font, const std::wstring& str)
 {
 	using std::vector;
@@ -44,4 +15,11 @@ void RenderText(FTFont* font, const std::wstring& str)
 		glPopMatrix();
 		glTranslatef(.0f, -font->LineHeight(), .0f);
 	}
+}
+void Render(const boost::shared_ptr<FTFont>& font, const std::wstring& str)
+{
+	glPushMatrix();
+	glTranslatef(-font->Advance(str.c_str())/2, .0f, .0f);
+	font->Render(str.c_str());
+	glPopMatrix();
 }
