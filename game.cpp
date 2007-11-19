@@ -3,6 +3,7 @@
 #define SIZE 1.0
 #define DEPTH 0.2
 #define FONT "/usr/share/fonts/WinFont/msgothic.ttc"
+//#define FONT "msgothic.ttc"
 std::queue<int> game::event;
 mode game::current;
 boost::shared_ptr<FTFont> game::font;

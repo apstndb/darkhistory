@@ -1,7 +1,7 @@
 #include <boost/algorithm/string.hpp>
 #include <vector>
 #include "game.hpp"
-#include "mygllib.h"
+#include "mygllib.hpp"
 //void RenderMap(FTFont* font, multimap<wstring,wstring> v, wstring tstr)
 //{
 //	//for(multimap<wstring,wstring >::iterator i = v.find(tstr); i != v.end();++i) {

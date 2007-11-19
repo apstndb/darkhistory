@@ -11,8 +11,8 @@
 //#include <boost/assign.hpp>
 #include <FTGL/FTGLExtrdFont.h>
 //#include <FTGL/FTGLPolygonFont.h>
-#include "mylib.h"
-#include "mygllib.h"
+#include "mylib.hpp"
+#include "mygllib.hpp"
 #include "input.hpp"
 #include "kanaset.hpp"
 #include "game.hpp"

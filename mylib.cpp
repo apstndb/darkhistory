@@ -1,4 +1,4 @@
-#include "mylib.h"
+#include "mylib.hpp"
 #include <fstream>
 #include <iostream>
 #ifndef WIN32

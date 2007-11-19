@@ -2,7 +2,7 @@
 #include <vector>
 #include <boost/algorithm/string.hpp>
 #include "kanaset.hpp"
-#include "mylib.h"
+#include "mylib.hpp"
 using namespace std;
 using namespace boost::algorithm;
 KanaSet::KanaSet(const char* filename)
