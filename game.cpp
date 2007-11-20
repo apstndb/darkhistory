@@ -117,7 +117,11 @@ void GLFWCALL keyinput( int key, int action )
 				game::set_mode(MODE_GAME);
 				return;
 				break;
-			case GLFW_KEY_ESC:
+			case GLFW_KEY_F4:
+				game::set_mode(MODE_RESULT);
+				return;
+				break;
+//			case GLFW_KEY_ESC:
 			case GLFW_KEY_BACKSPACE:
 				if(game::get_mode()==MODE_GAME) {
 					game::push_event(key);

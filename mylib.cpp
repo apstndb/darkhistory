@@ -1,14 +1,14 @@
 #include "mylib.hpp"
-#include <fstream>
+//#include <fstream>
 #include <iostream>
 #ifndef WIN32
 #include <iconv.h>
 #endif
-#include <boost/algorithm/string.hpp>
+//#include <boost/algorithm/string.hpp>
 //using std::ifstream;
 //using std::pair;
 //using std::string;
-using std::wstring;
+//using std::wstring;
 //using std::multimap;
 //using std::vector;
 //using namespace boost::algorithm;
@@ -78,6 +78,20 @@ const multimap<wstring,wstring>& init(const char* filename)
 	return hash;
 }
 */
+const std::wstring find_matchstr(const std::wstring& l, const std::wstring& r)
+{
+//	using namespace boost;
+	using namespace std;
+//	range_iterator<Range>::type li = begin(l), le = end(l);
+//	range_iterator<Range>::type ri = begin(r), re = end(r);
+	std::wstring::const_iterator li = l.begin(), le = l.end(), ri = r.begin();
+	for(;li!=le;++li,++ri) {
+		if(*li!=*ri) break;
+	}
+	return std::wstring(l.begin(), li);
+
+	
+}
 void convertMultiByteToWideChar(const char* pStrMultiByte, std::wstring& rStrWideChar)
 {
 	size_t numWCharsNeeded =  ::mbstowcs(NULL, pStrMultiByte, 0);

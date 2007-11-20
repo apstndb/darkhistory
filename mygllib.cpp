@@ -16,10 +16,41 @@ void RenderText(FTFont* font, const std::wstring& str)
 		glTranslatef(.0f, -font->LineHeight(), .0f);
 	}
 }
-void Render(const boost::shared_ptr<FTFont>& font, const std::wstring& str)
+void Render(const boost::shared_ptr<FTFont>& font, const std::wstring& str, render_flag flag)
 {
 	glPushMatrix();
-	glTranslatef(-font->Advance(str.c_str())/2, .0f, .0f);
+	switch(flag) {
+		case RENDER_LEFT:
+			glTranslatef(-font->Advance(str.c_str()), .0f, .0f);
+			break;
+		case RENDER_CENTER:
+			glTranslatef(-font->Advance(str.c_str())/2, .0f, .0f);
+			break;
+		case RENDER_RIGHT:
+			break;
+	}
 	font->Render(str.c_str());
+	glPopMatrix();
+}
+void RenderPartiallColor(const boost::shared_ptr<FTFont>& font, const std::wstring& str, size_t num, render_flag flag)
+{
+	glPushMatrix();
+	switch(flag) {
+		case RENDER_LEFT:
+			glTranslatef(-font->Advance(str.c_str()), .0f, .0f);
+			break;
+		case RENDER_CENTER:
+			glTranslatef(-font->Advance(str.c_str())/2, .0f, .0f);
+			break;
+		case RENDER_RIGHT:
+			break;
+	}
+	glPushMatrix();
+	glColor3f(0.0, 0.0, 1.0);
+	font->Render(str.substr(0,num).c_str());
+	glPopMatrix();
+	glTranslatef(font->Advance(str.substr(0,num).c_str()), .0f, .0f);
+	glColor3f(1.0, 0.0, 0.0);
+	font->Render(str.substr(num).c_str());
 	glPopMatrix();
 }

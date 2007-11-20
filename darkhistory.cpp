@@ -8,10 +8,13 @@
 #include "mygllib.hpp"
 #include "kanaset.hpp"
 #include "game.hpp"
+#include "darkhistory.hpp"
 #include <boost/format.hpp>
+#include <boost/filesystem.hpp>
 
 using namespace std;
 using namespace boost;
+using namespace boost::filesystem;
 
 void setUpLighting()
 {
@@ -207,16 +210,20 @@ void Draw( KanaSet* set, KanaSet* hatena)
 			Render(game::font, boost::str(wformat(L"%1$ .2f")%t));
 			glPopMatrix();
 			setUpLighting();
+			glPushMatrix();
 			glTranslatef(.0f, .0f, -5.0f);
 			Render(game::font, current_word.kana);
-			//game::random(hatena->kanaset.size());
-			//Render(game::font, hatena->kanaset[ int(t) ].kana);
 			glTranslatef( .0, -2.0, .0);
 			Render(game::font, current_word.yomi);
 			glTranslatef( .0, -2.0, .0);
-			Render(game::font, game::input.get_kana());
+			RenderPartiallColor(game::font, game::input.get_kana(),
+					find_matchstr(current_word.yomi, game::input.get_kana()).size());
+			glPopMatrix();
 			break;
 		case MODE_RESULT:
+			//static wstring wstr(L"本日は晴天なり");
+			//static int i = 3;
+			//RenderPartiallColor(game::font, wstr, 3);
 			break;
 		default:
 			break;
@@ -230,24 +237,27 @@ void Draw( KanaSet* set, KanaSet* hatena)
 // main() - Program entry point
 //----------------------------------------------------------------------
 
-int main( int argc, char **argv )
+int mymain()
 {
 	int    ok;      // Flag telling if the window was opened
 	int    running;     // Flag telling if the program is running
 	setlocale(LC_ALL, "");
 	KanaSet set("roma2hira.dat");
 	KanaSet hatena("keywordlist_furigana.csv");
+	path fscheckfile("fullscreen");
+	bool fs = exists(fscheckfile);
 	// Initialize GLFW
 	glfwInit();
 	game::init();
 	// Open window
 	ok = glfwOpenWindow(
-			640, 480,     // Width and height of window
+			fs?1024:640, fs?768:480,     // Width and height of window
 			8, 8, 8,     // Number of red, green, and blue bits for color buffer
 			8,       // Number of bits for alpha buffer
 			24,       // Number of bits for depth buffer (Z-buffer)
 			0,       // Number of bits for stencil buffer
-			GLFW_WINDOW     // We want a desktop window (could be GLFW_FULLSCREEN)
+//			GLFW_WINDOW     // We want a desktop window (could be GLFW_FULLSCREEN)
+	fs?GLFW_FULLSCREEN:GLFW_WINDOW
 			);
 
 	// If we could not open a window, exit now
@@ -281,7 +291,8 @@ int main( int argc, char **argv )
 		glfwSwapBuffers();
 
 		// Check if the escape key was pressed, or if the window was closed
-		running = glfwGetWindowParam( GLFW_OPENED );
+		running = !glfwGetKey( GLFW_KEY_ESC ) &&
+			glfwGetWindowParam( GLFW_OPENED );
 	}
 	while( running );
 
