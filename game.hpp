@@ -8,6 +8,15 @@
 void GLFWCALL keyinput( int, int );
 void GLFWCALL charinput( int, int );
 void GLFWCALL titleinput( int, int );
+struct Score {
+	int hit;
+	int letter;
+	int word;
+	Score()
+		:hit(0), letter(0), word(0)
+	{}
+};
+
 enum mode {
 	MODE_LOGO,
 	MODE_TITLE,
@@ -19,6 +28,9 @@ class game {
 	static mode current;
 	public:
 	static Input input;
+	static Score score;
+	static bool ctrl;
+	static bool flag;
 	static boost::function<long (long)> random;
 	static boost::shared_ptr<FTFont> font;
 	static boost::shared_ptr<FTFont> extrdfont;

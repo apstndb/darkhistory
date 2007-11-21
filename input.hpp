@@ -10,24 +10,24 @@ class Input {
 	Input()
 	{
 	}
-	inline void lock() {lock_ = true;}
-	inline void unlock() {lock_ = false;}
-	inline bool is_lock() {return lock_; }
+//	inline void lock() {lock_ = true;}
+//	inline void unlock() {lock_ = false;}
+//	inline bool is_lock() {return lock_; }
 	inline void backspace()
 	{
-		if(is_lock()) return;
+//		if(is_lock()) return;
 		if(buffer.size()) buffer.resize(buffer.size()-1);
 	}
 	inline void clear()
 	{
-		if(is_lock()) return;
+//		if(is_lock()) return;
 		buffer.clear();
 		kana.clear();
 	}
 
 	inline void operator()(int c)
 	{
-		if(is_lock()) return;
+//		if(is_lock()) return;
 		switch(c) {
 			case GLFW_KEY_BACKSPACE:
 				backspace();
@@ -47,6 +47,10 @@ class Input {
 	inline const std::wstring& get_kana() const
 	{
 		return kana;
+	};
+	inline const size_t size() const
+	{
+		return buffer.size();
 	};
 
 };

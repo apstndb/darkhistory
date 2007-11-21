@@ -19,12 +19,14 @@ void RenderText(FTFont* font, const std::wstring& str)
 void Render(const boost::shared_ptr<FTFont>& font, const std::wstring& str, render_flag flag)
 {
 	glPushMatrix();
+	GLfloat size = font->Advance(str.c_str());
+	if(size>17) glScalef(17/size, 17/size, 17/size);
 	switch(flag) {
 		case RENDER_LEFT:
-			glTranslatef(-font->Advance(str.c_str()), .0f, .0f);
+			glTranslatef(-size, .0f, .0f);
 			break;
 		case RENDER_CENTER:
-			glTranslatef(-font->Advance(str.c_str())/2, .0f, .0f);
+			glTranslatef(-size/2, .0f, .0f);
 			break;
 		case RENDER_RIGHT:
 			break;
@@ -35,12 +37,14 @@ void Render(const boost::shared_ptr<FTFont>& font, const std::wstring& str, rend
 void RenderPartiallColor(const boost::shared_ptr<FTFont>& font, const std::wstring& str, size_t num, render_flag flag)
 {
 	glPushMatrix();
+	GLfloat size = font->Advance(str.c_str());
+	if(size>17) glScalef(17/size, 17/size, 17/size);
 	switch(flag) {
 		case RENDER_LEFT:
-			glTranslatef(-font->Advance(str.c_str()), .0f, .0f);
+			glTranslatef(-size, .0f, .0f);
 			break;
 		case RENDER_CENTER:
-			glTranslatef(-font->Advance(str.c_str())/2, .0f, .0f);
+			glTranslatef(-size/2, .0f, .0f);
 			break;
 		case RENDER_RIGHT:
 			break;

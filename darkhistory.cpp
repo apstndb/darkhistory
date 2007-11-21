@@ -11,6 +11,7 @@
 #include "darkhistory.hpp"
 #include <boost/format.hpp>
 #include <boost/filesystem.hpp>
+//#include <boost/lexical_cast.hpp>
 
 using namespace std;
 using namespace boost;
@@ -144,7 +145,12 @@ void Draw( KanaSet* set, KanaSet* hatena)
 	// Here is where actual OpenGL rendering calls would begin...
 	switch(game::get_mode()) {
 		case MODE_LOGO:
-			if(t < 6.0) glTranslated(.0,fabs(sin(6.28*t))/(t*t),-3/(t*t*t*t));
+			if(t < 5.0) {
+				glTranslated(.0,fabs(sin(6.28*t))/(t*t),-3/(t*t*t*t));
+			} else if(t > 6.0) {
+				game::set_mode(MODE_TITLE);
+				return;
+			}
 
 			glScalef(1.5f,1.5f,1.5f);
 			glEnable( GL_TEXTURE_2D );
@@ -160,19 +166,19 @@ void Draw( KanaSet* set, KanaSet* hatena)
 			glVertex2d(-8.0,-1.0);
 			glEnd();
 			glDisable( GL_TEXTURE_2D );
+
 			break;
 		case MODE_TITLE:
 			setUpLighting();
 			glPushMatrix();
-			if(t < 6.0) {
+			if(t < 4.0) {
 				glTranslatef(.0, .0, -1/(t*t*t*t));
 				glRotatef(180/(t*t*t*t*t) ,0.0, 0.0, 1.0);
 			}
-
 			glScalef(1.5, 1.5, 1.5);
 			Render(game::extrdfont, L"タイピング黒歴史");
 			glPopMatrix();
-			if(t >= 6.0) {
+			if(t > 2.0) {
 				glPushMatrix();
 				glTranslatef(.0, -3.0, .0);
 				glRotatef(30*sin(t) ,0.0, 1.0, 0.0);
@@ -184,7 +190,7 @@ void Draw( KanaSet* set, KanaSet* hatena)
 		case MODE_GAME:
 			static KanaYomi current_word;
 			static double c;
-			static bool flag = true;
+			//static bool flag = true;
 			//static shared_ptr<const KanaYomi> current_word; 
 			while(!game::event_is_empty()) { 
 				game::input(game::pop_event());
@@ -192,38 +198,62 @@ void Draw( KanaSet* set, KanaSet* hatena)
 
 			}
 			if(60 < t) {
+				game::score.letter+=find_matchstr(current_word.yomi, game::input.get_kana()).size();
 				game::set_mode(MODE_RESULT);
-				flag = true;
+				game::flag = true;
 			}
 			if(current_word.yomi == game::input.get_kana()) {
-				flag = true;
-				game::input.clear();
+				game::score.word++;
+				//game::score.hit+=game::input.size();
+				game::score.letter+=current_word.yomi.size();
+				game::flag = true;
 			}
-			if(flag) {
+			if(game::flag) {
 				//current_word = shared_ptr<const KanaYomi>(&hatena->kanaset[ game::random(hatena->kanaset.size()) ]);
+				game::input.clear();
 				current_word = hatena->kanaset[ game::random(hatena->kanaset.size()) ];
-				flag = false;
+				game::flag = false;
 				//	c+=1.0;
 			}
 			glPushMatrix();
-			glTranslatef(5.0, 5.0, .0);
-			Render(game::font, boost::str(wformat(L"%1$ .2f")%t));
+			glTranslatef(.0,-5.0,.0);
+			Render(game::font, L"BackSpace: 一文字削除、Enter: クリア、Space: スキップ");
 			glPopMatrix();
-			setUpLighting();
 			glPushMatrix();
-			glTranslatef(.0f, .0f, -5.0f);
+			glTranslatef(5.0, 5.0, .0);
+			Render(game::font, boost::str(wformat(L"%1$ .2f")%(60-t)));
+			glPopMatrix();
+			//setUpLighting();
+			glPushMatrix();
+			static GLfloat maxsize;
+			maxsize = max(game::font->Advance(current_word.kana.c_str()), game::font->Advance(current_word.yomi.c_str()));
+			//if(maxsize>17) glScalef(17/maxsize, 17/maxsize, 17/maxsize);
+			glTranslatef( .0f, 2.5, -1.0);
 			Render(game::font, current_word.kana);
-			glTranslatef( .0, -2.0, .0);
+			glTranslatef( .0, -2.5, .0);
 			Render(game::font, current_word.yomi);
-			glTranslatef( .0, -2.0, .0);
+			glTranslatef( .0, -2.5, .0);
 			RenderPartiallColor(game::font, game::input.get_kana(),
 					find_matchstr(current_word.yomi, game::input.get_kana()).size());
 			glPopMatrix();
 			break;
 		case MODE_RESULT:
+			glPushMatrix();
+			glTranslatef(.0,-5.0,.0);
+			Render(game::font, L"Enter: タイトル画面に戻る");
+			glPopMatrix();
 			//static wstring wstr(L"本日は晴天なり");
 			//static int i = 3;
 			//RenderPartiallColor(game::font, wstr, 3);
+			glPushMatrix();
+			//glTranslatef(.0, +2*game::font->LineHeight(),.0);
+			//Render(game::font, str(wformat(L"入力した単語数 %1%") % game::score.word));
+			glTranslatef(.0, +2*game::font->LineHeight(),.0);
+			Render(game::font, str(wformat(L"正しく入力されたかな数 %1%") % game::score.letter));
+			glTranslatef(.0, -2*game::font->LineHeight(),.0);
+			//Render(game::font, str(wformat(L"間違いを含めたキー入力数 %1%") % game::score.hit));
+			Render(game::font, str(wformat(L"入力速度 %1% かな/秒") % (game::score.letter / 60.0)));
+			glPopMatrix();
 			break;
 		default:
 			break;
@@ -242,8 +272,8 @@ int mymain()
 	int    ok;      // Flag telling if the window was opened
 	int    running;     // Flag telling if the program is running
 	setlocale(LC_ALL, "");
-	KanaSet set("roma2hira.dat");
-	KanaSet hatena("keywordlist_furigana.csv");
+	KanaSet set("roma2hira.txt");
+	KanaSet hatena("word.txt");
 	path fscheckfile("fullscreen");
 	bool fs = exists(fscheckfile);
 	// Initialize GLFW
@@ -256,8 +286,8 @@ int mymain()
 			8,       // Number of bits for alpha buffer
 			24,       // Number of bits for depth buffer (Z-buffer)
 			0,       // Number of bits for stencil buffer
-//			GLFW_WINDOW     // We want a desktop window (could be GLFW_FULLSCREEN)
-	fs?GLFW_FULLSCREEN:GLFW_WINDOW
+			//			GLFW_WINDOW     // We want a desktop window (could be GLFW_FULLSCREEN)
+			fs?GLFW_FULLSCREEN:GLFW_WINDOW
 			);
 
 	// If we could not open a window, exit now
@@ -283,7 +313,7 @@ int mymain()
 	// Main rendering loop
 	do
 	{
-		game::input.unlock();
+		//		game::input.unlock();
 		// Call our rendering function
 		Draw(&set, &hatena);
 
