@@ -228,7 +228,7 @@ void Draw( KanaSet* set, KanaSet* hatena)
 			static GLfloat maxsize;
 			maxsize = max(game::font->Advance(current_word.kana.c_str()), game::font->Advance(current_word.yomi.c_str()));
 			//if(maxsize>17) glScalef(17/maxsize, 17/maxsize, 17/maxsize);
-			glTranslatef( .0f, 2.5, -1.0);
+			glTranslatef( .0f, 2.5, .0);
 			Render(game::font, current_word.kana);
 			glTranslatef( .0, -2.5, .0);
 			Render(game::font, current_word.yomi);
@@ -298,7 +298,7 @@ int mymain()
 	}
 
 	// Set window title
-	glfwSetWindowTitle("My OpenGL program");
+	glfwSetWindowTitle("The Dark History");
 
 	//glfwSetCharCallback(charinput);
 	game::set_mode(MODE_LOGO);
