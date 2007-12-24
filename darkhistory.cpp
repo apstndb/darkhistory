@@ -1,9 +1,6 @@
-//#include <stdlib.h>    // For malloc() etc.
-//#include <stdio.h>    // For printf(), fopen() etc.
 #include <cmath>    // For sin(), cos() etc.
 #include <GL/glfw.h>   // For GLFW, OpenGL and GLU
-//#include <FTGL/FTGLExtrdFont.h>
-//#include <FTGL/FTGLPolygonFont.h>
+#include <GL/glc.h>   // For GLFW, OpenGL and GLU
 #include "mylib.hpp"
 #include "mygllib.hpp"
 #include "kanaset.hpp"
@@ -11,7 +8,6 @@
 #include "darkhistory.hpp"
 #include <boost/format.hpp>
 #include <boost/filesystem.hpp>
-//#include <boost/lexical_cast.hpp>
 
 using namespace std;
 using namespace boost;
@@ -62,20 +58,12 @@ void setUpLighting()
 // Textures
 //========================================================================
 
-enum tex_enum { TEX_TITLE, TEX_MENU, TEX_WINNER1, TEX_WINNER2, TEX_FIELD };
+enum tex_enum { TEX_TITLE };
 #define NUM_TEXTURES 1
 
 // Texture names
 
-const char * tex_name[ NUM_TEXTURES ] = {
-	//    "pong3d_title.tga",
-	"sofmelogo.tga",
-	//    "pong3d_menu.tga",
-	//    "pong3d_instr.tga",
-	//    "pong3d_winner1.tga",
-	//    "pong3d_winner2.tga",
-	//    "pong3d_field.tga"
-};
+const char* tex_name[ NUM_TEXTURES ] = { "sofmelogo.tga" };
 
 // OpenGL texture object IDs
 GLuint tex_id[ NUM_TEXTURES ];
@@ -140,7 +128,7 @@ void Draw( KanaSet* set, KanaSet* hatena)
 	glDisable(GL_LIGHTING);
 	glDisable(GL_COLOR_MATERIAL);
 	glDisable(GL_LIGHT1);
-	glColor4f(1.0, 1.0, 1.0, 0.0);
+	glColor3f(1.0, 1.0, 1.0);
 
 	// Here is where actual OpenGL rendering calls would begin...
 	switch(game::get_mode()) {
@@ -176,22 +164,19 @@ void Draw( KanaSet* set, KanaSet* hatena)
 				glRotatef(180/(t*t*t*t*t) ,0.0, 0.0, 1.0);
 			}
 			glScalef(1.5, 1.5, 1.5);
-			Render(game::extrdfont, L"タイピング黒歴史");
+			Render(L"タイピング黒歴史");
 			glPopMatrix();
 			if(t > 2.0) {
 				glPushMatrix();
 				glTranslatef(.0, -3.0, .0);
 				glRotatef(30*sin(t) ,0.0, 1.0, 0.0);
-				Render(game::extrdfont, L"hit any key");
+				Render(L"hit any key");
 				glPopMatrix();
 			}
 			break;
 
 		case MODE_GAME:
 			static KanaYomi current_word;
-			static double c;
-			//static bool flag = true;
-			//static shared_ptr<const KanaYomi> current_word; 
 			while(!game::event_is_empty()) { 
 				game::input(game::pop_event());
 				game::input.regen_kana(set);
@@ -204,55 +189,44 @@ void Draw( KanaSet* set, KanaSet* hatena)
 			}
 			if(current_word.yomi == game::input.get_kana()) {
 				game::score.word++;
-				//game::score.hit+=game::input.size();
 				game::score.letter+=current_word.yomi.size();
 				game::flag = true;
 			}
 			if(game::flag) {
-				//current_word = shared_ptr<const KanaYomi>(&hatena->kanaset[ game::random(hatena->kanaset.size()) ]);
 				game::input.clear();
 				current_word = hatena->kanaset[ game::random(hatena->kanaset.size()) ];
 				game::flag = false;
-				//	c+=1.0;
 			}
 			glPushMatrix();
 			glTranslatef(.0,-5.0,.0);
-			Render(game::font, L"BackSpace: 一文字削除、Enter: クリア、Space: スキップ");
+			Render(L"BackSpace: 一文字削除、Enter: クリア、Space: スキップ");
 			glPopMatrix();
 			glPushMatrix();
 			glTranslatef(5.0, 5.0, .0);
-			Render(game::font, boost::str(wformat(L"%1$ .2f")%(60-t)));
+			Render(str(wformat(L"%1$ .2f")%(60-t)));
 			glPopMatrix();
-			//setUpLighting();
 			glPushMatrix();
-			static GLfloat maxsize;
-			maxsize = max(game::font->Advance(current_word.kana.c_str()), game::font->Advance(current_word.yomi.c_str()));
-			//if(maxsize>17) glScalef(17/maxsize, 17/maxsize, 17/maxsize);
 			glTranslatef( .0f, 2.5, .0);
-			Render(game::font, current_word.kana);
+			Render(current_word.kana);
 			glTranslatef( .0, -2.5, .0);
-			Render(game::font, current_word.yomi);
+			Render(current_word.yomi);
 			glTranslatef( .0, -2.5, .0);
-			RenderPartiallColor(game::font, game::input.get_kana(),
+			RenderPartiallColor(game::input.get_kana(),
 					find_matchstr(current_word.yomi, game::input.get_kana()).size());
 			glPopMatrix();
 			break;
 		case MODE_RESULT:
 			glPushMatrix();
 			glTranslatef(.0,-5.0,.0);
-			Render(game::font, L"Enter: タイトル画面に戻る");
+			Render(L"Enter: タイトル画面に戻る");
 			glPopMatrix();
-			//static wstring wstr(L"本日は晴天なり");
-			//static int i = 3;
-			//RenderPartiallColor(game::font, wstr, 3);
 			glPushMatrix();
-			//glTranslatef(.0, +2*game::font->LineHeight(),.0);
-			//Render(game::font, str(wformat(L"入力した単語数 %1%") % game::score.word));
-			glTranslatef(.0, +2*game::font->LineHeight(),.0);
-			Render(game::font, str(wformat(L"正しく入力されたかな数 %1%") % game::score.letter));
-			glTranslatef(.0, -2*game::font->LineHeight(),.0);
-			//Render(game::font, str(wformat(L"間違いを含めたキー入力数 %1%") % game::score.hit));
-			Render(game::font, str(wformat(L"入力速度 %1% かな/秒") % (game::score.letter / 60.0)));
+			glTranslatef(0, 3, 0);
+			Render(str(wformat(L"入力した単語数 %1%") % game::score.word));
+			glTranslatef(0, -3, 0);
+			Render(str(wformat(L"正しく入力されたかな数 %1%") % game::score.letter));
+			glTranslatef(0, -3, 0);
+			Render(str(wformat(L"入力速度 %1% かな/秒") % (game::score.letter / 60.0)));
 			glPopMatrix();
 			break;
 		default:
@@ -274,11 +248,12 @@ int mymain()
 	setlocale(LC_ALL, "");
 	KanaSet set("roma2hira.txt");
 	KanaSet hatena("word.txt");
-	path fscheckfile("fullscreen");
-	bool fs = exists(fscheckfile);
+	//path fscheckfile("fullscreen");
+	FILE *fp = fopen("fullscreen", "r");
+	bool fs = fp!=NULL;
+	if(fs) fclose(fp);
 	// Initialize GLFW
 	glfwInit();
-	game::init();
 	// Open window
 	ok = glfwOpenWindow(
 			fs?1024:640, fs?768:480,     // Width and height of window
@@ -300,20 +275,24 @@ int mymain()
 	// Set window title
 	glfwSetWindowTitle("The Dark History");
 
-	//glfwSetCharCallback(charinput);
 	game::set_mode(MODE_LOGO);
 
 	// Enable sticky keys
-	//glfwEnable(GLFW_STICKY_KEYS);
 	glfwDisable(GLFW_KEY_REPEAT);
 
-	//	glEnable(GL_CULL_FACE);
-
 	LoadTextures();
+	GLint ctx = glcGenContext();
+	glcContext(ctx);
+#ifdef WIN32
+	glcStringType(GLC_UCS2);
+#else
+	glcStringType(GLC_UCS4);
+#endif //!WIN32
+	glcRenderStyle(GLC_TRIANGLE);
+	game::init();
 	// Main rendering loop
 	do
 	{
-		//		game::input.unlock();
 		// Call our rendering function
 		Draw(&set, &hatena);
 
@@ -353,7 +332,7 @@ void LoadTextures( void )
 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 
 		// Upload texture from file to texture memory
-		glfwLoadTexture2D( tex_name[ i ], 0 );
+		glfwLoadTexture2D( tex_name[i], 0 );
 	}
 }
 

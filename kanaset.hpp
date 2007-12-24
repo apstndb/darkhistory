@@ -4,7 +4,6 @@
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/ordered_index.hpp>
 #include <boost/multi_index/key_extractors.hpp>
-//#include <boost/multi_index/sequenced_index.hpp>
 #include <boost/multi_index/random_access_index.hpp>
 using namespace boost::multi_index;
 struct KanaYomi {
@@ -49,6 +48,7 @@ struct yomi_comparator {
 	}
 };
 class KanaSet {
+	unsigned int maxchar;
 	inline void push(const KanaYomi& entry) {
 		kanaset.push_back(entry);
 		unsigned i=entry.yomi.size();
@@ -59,19 +59,16 @@ class KanaSet {
 		KanaYomi,
 		indexed_by<
 			random_access<tag<by_random> >,
-		//	sequenced<tag<by_fifo> >,
 		ordered_unique<tag<by_yomi>,identity<KanaYomi>,yomi_comparator >,
 		ordered_non_unique<
 			tag<by_kana>,
 		member<KanaYomi, std::wstring, &KanaYomi::kana> >
 			>
 			> kanaset_set_t;
-	unsigned int maxchar;
 	kanaset_set_t kanaset;
 	typedef kanaset_set_t::index<by_kana>::type kanaset_kana_index;
 	typedef kanaset_set_t::index<by_yomi>::type kanaset_yomi_index;
 	typedef kanaset_set_t::index<by_random>::type kanaset_random_index;
-	//typedef kanaset_set_t::index<by_fifo>::type kanaset_fifo_index;
 
 	inline KanaYomi random();
 	std::wstring to_kana(const std::wstring&);

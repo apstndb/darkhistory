@@ -1,8 +1,6 @@
 #include <GL/glfw.h>
-#include <boost/shared_ptr.hpp>
 #include <boost/random.hpp>
 #include <boost/function.hpp>
-#include <FTGL/FTFont.h>
 #include <queue>
 #include "input.hpp"
 void GLFWCALL keyinput( int, int );
@@ -32,8 +30,6 @@ class game {
 	static bool ctrl;
 	static bool flag;
 	static boost::function<long (long)> random;
-	static boost::shared_ptr<FTFont> font;
-	static boost::shared_ptr<FTFont> extrdfont;
 	static bool event_is_empty();
 	static void set_mode(mode next);
 	static mode get_mode();

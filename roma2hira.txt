@@ -1,17 +1,3 @@
-# vi:set ts=8 sts=8 sw=8 tw=0:
-#
-# roma2hira.dat - ローマ字→平仮名変換表
-# 
-# Last Change: 18-Jun-2004.
-# Written By:  Muraoka Taro  <koron@tka.att.ne.jp>
-
-# こいつをカスタマイズすることでローマ字の入力方式が変わります。
-# 現在はMS-IME2000を参考に決定しています。
-# 漢字コードの違いを吸収する役割も果たします。
-# xnとxtuには「ん」と「っ」を指定する役割があります。
-# {from} {to}の形式です。
-# {from}と{to}の間は空白文字(isspace())で区切ります。
-
 a	あ
 i	い
 u	う

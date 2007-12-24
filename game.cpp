@@ -2,21 +2,12 @@
 #include "mylib.hpp"
 #include <sys/timeb.h>
 #include <iostream>
-#include <FTGL/FTGLPolygonFont.h>
-#include <FTGL/FTGLExtrdFont.h>
-#include <boost/filesystem.hpp>
-#define SIZE 1.0
-#define DEPTH 0.2
+#include <GL/glc.h>
 #ifdef WIN32
 #define _WIN32_IE 0x400
 #include <shlobj.h>
 #endif //WIN32
-//#define FONT "/usr/share/fonts/WinFont/msgothic.ttc"
-#define FONT "/usr/share/fonts/WinFont/msgothic.ttc"
-#define FONTDIR "/usr/share/fonts/WinFont"
-#define FONTNAME "msgothic.ttc"
 
-//#define FONT "msgothic.ttc"
 std::queue<int> game::event;
 Score game::score;
 Input game::input;
@@ -24,42 +15,13 @@ boost::function<long (long)> game::random;
 mode game::current;
 bool game::ctrl;
 bool game::flag=false;
-boost::shared_ptr<FTFont> game::font;
-boost::shared_ptr<FTFont> game::extrdfont;
 void game::init()
 {
-	using namespace boost;
-	using namespace boost::filesystem;
-	std::string fontdir;
 #ifdef WIN32
-	TCHAR szPath[_MAX_PATH];
-	SHGetSpecialFolderPath(NULL, szPath, CSIDL_FONTS, FALSE);
-	fontdir = szPath;
-	//std::cout << szPath<< std::endl;
-	//convertWideCharToMultiByte((const wchar_t*)szPath, fontdir);
-	//std::cout << fontdir << std::endl;
-#else
-	fontdir = FONTDIR;
+	TCHAR fontdir[_MAX_PATH];
+	SHGetSpecialFolderPath(NULL, fontdir, CSIDL_FONTS, FALSE);
+	glcAppendCatalog(fontdir);
 #endif // WIN32
-	path fontpath(fontdir);
-	fontpath /= FONTNAME;
-#ifdef MY_DEBUG
-	std::cout << fontpath.string() << std::endl;
-#endif // MY_DEBUG
-	if(!exists(fontpath)) {
-		std::cout << "File " << fontpath.string() << " is not found." << std::endl;
-		exit(1);
-	}
-	font = shared_ptr<FTFont>(new FTGLPolygonFont(fontpath.string().c_str()));
-	extrdfont = shared_ptr<FTFont>(new FTGLExtrdFont(fontpath.string().c_str()));
-	if(extrdfont->Error()) exit(1);                     // can't open font file
-	if(!extrdfont->FaceSize(SIZE)) exit(1);             // can't set font size
-	extrdfont->Depth(DEPTH);
-	if(!extrdfont->CharMap(ft_encoding_unicode)) exit(1);// can't set charmap
-	if(font->Error()) exit(1);                     // can't open font file
-	if(!font->FaceSize(SIZE)) exit(1);             // can't set font size
-	if(!font->CharMap(ft_encoding_unicode)) exit(1);// can't set charmap
-
 }
 bool game::event_is_empty()
 {
@@ -96,7 +58,6 @@ void game::set_mode(mode next)
 			break;
 		case MODE_TITLE:
 			score = Score();
-			//glfwSetCharCallback(charinput);
 			glfwSetCharCallback(titleinput);
 			break;
 		case MODE_GAME:
@@ -129,7 +90,6 @@ void GLFWCALL keyinput( int key, int action )
 				return;
 				break;
 #endif // MY_DEBUG
-//			case GLFW_KEY_ESC:
 			case GLFW_KEY_BACKSPACE:
 				if(game::get_mode()==MODE_GAME) {
 					game::push_event(key);
@@ -152,7 +112,7 @@ void GLFWCALL keyinput( int key, int action )
 						break;
 					case MODE_GAME:
 						game::push_event(GLFW_KEY_ESC);
-						
+
 						return;
 						break;
 					default:
@@ -165,18 +125,11 @@ void GLFWCALL keyinput( int key, int action )
 
 		}
 	}
-//	if(key==GLFW_KEY_LCTRL || key==GLFW_KEY_RCTRL)
-//		if(action==GLFW_PRESS) {
-//			game::ctrl=true;
-//		} else {
-//			game::ctrl=false;
-//		}
-//
 }
 void GLFWCALL titleinput( int character, int action )
 {
-			game::set_mode(MODE_GAME);
-			return;
+	game::set_mode(MODE_GAME);
+	return;
 }
 void GLFWCALL charinput( int character, int action )
 {
@@ -188,7 +141,6 @@ void GLFWCALL charinput( int character, int action )
 		}
 		if(glfwGetKey(GLFW_KEY_LCTRL)==GLFW_PRESS ||
 				glfwGetKey(GLFW_KEY_RCTRL)==GLFW_PRESS) {
-		//if(game::ctrl) {
 			switch(character) {
 				case 'h':
 				case 'H':
