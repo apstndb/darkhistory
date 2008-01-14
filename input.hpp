@@ -1,50 +1,24 @@
 #include <string>
-#include "kanaset.hpp"
+class KanaSet;
 class Input {
 
-	std::wstring buffer;
-	std::wstring kana;
+	std::wstring* buffer;
+	std::wstring* kana;
 	bool lock_;
 	public:
 	Input()
 	{
 	}
-	inline void backspace()
-	{
-		if(buffer.size()) buffer.resize(buffer.size()-1);
-	}
-	inline void clear()
-	{
-		buffer.clear();
-		kana.clear();
-	}
+	void backspace();
+	void clear();
 
-	inline void operator()(int c)
+	void operator()(int c);
+	void regen_kana(KanaSet* set);
+	const std::wstring& get_kana() const
 	{
-		switch(c) {
-			case GLFW_KEY_BACKSPACE:
-				backspace();
-				break;
-			case GLFW_KEY_ESC:
-				clear();
-				break;
-			default:
-				buffer += static_cast<wchar_t>(c);
-				break;
-		}
-	}
-	inline void regen_kana(KanaSet* set)
-	{
-		kana=set->to_kana(buffer);
-	}
-	inline const std::wstring& get_kana() const
-	{
-		return kana;
+		return *kana;
 	};
-	inline const size_t size() const
-	{
-		return buffer.size();
-	};
+	inline const size_t size() const;
 
 };
 

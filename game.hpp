@@ -1,11 +1,6 @@
-#include <GL/glfw.h>
-#include <boost/random.hpp>
 #include <boost/function.hpp>
 #include <queue>
-#include "input.hpp"
-void GLFWCALL keyinput( int, int );
-void GLFWCALL charinput( int, int );
-void GLFWCALL titleinput( int, int );
+class Input;
 struct Score {
 	int hit;
 	int letter;

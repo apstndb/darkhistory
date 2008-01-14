@@ -9,9 +9,6 @@ using namespace boost::multi_index;
 struct KanaYomi {
 	std::wstring kana;
 	std::wstring yomi;
-	bool operator<(const KanaYomi& r) const {
-		return yomi < r.yomi;
-	}
 	KanaYomi()
 		: kana(),yomi()
 	{
@@ -59,18 +56,13 @@ class KanaSet {
 		KanaYomi,
 		indexed_by<
 			random_access<tag<by_random> >,
-		ordered_unique<tag<by_yomi>,identity<KanaYomi>,yomi_comparator >,
-		ordered_non_unique<
-			tag<by_kana>,
-		member<KanaYomi, std::wstring, &KanaYomi::kana> >
-			>
+		ordered_unique<tag<by_yomi>,identity<KanaYomi>,yomi_comparator >			>
 			> kanaset_set_t;
 	kanaset_set_t kanaset;
-	typedef kanaset_set_t::index<by_kana>::type kanaset_kana_index;
 	typedef kanaset_set_t::index<by_yomi>::type kanaset_yomi_index;
 	typedef kanaset_set_t::index<by_random>::type kanaset_random_index;
 
-	inline KanaYomi random();
+	//inline KanaYomi random();
 	std::wstring to_kana(const std::wstring&);
 	KanaSet(const char*); 
 };

@@ -1,15 +1,13 @@
-#include "mylib.hpp"
+#include <string>
 #include <iostream>
-const std::wstring find_matchstr(const std::wstring& l, const std::wstring& r)
+#include "mylib.hpp"
+size_t matchLength(const wchar_t* a, const wchar_t* b)
 {
-	using namespace std;
-	std::wstring::const_iterator li = l.begin(), le = l.end(), ri = r.begin();
-	for(;li!=le;++li,++ri) {
-		if(*li!=*ri) break;
-	}
-	return std::wstring(l.begin(), li);
+	size_t i;
 
-	
+	for(i = 0; a && a[i] == b[i]; i++)
+		;
+	return i;
 }
 void convertMultiByteToWideChar(const char* pStrMultiByte, std::wstring& rStrWideChar)
 {

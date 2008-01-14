@@ -1,13 +1,18 @@
-#include "game.hpp"
-#include "mylib.hpp"
-#include <sys/timeb.h>
 #include <iostream>
+#include <sys/timeb.h>
+#include <boost/random.hpp>
 #include <GL/glc.h>
+#include <GL/glfw.h>
 #ifdef WIN32
 #define _WIN32_IE 0x400
 #include <shlobj.h>
 #endif //WIN32
+#include "game.hpp"
+#include "input.hpp"
 
+void GLFWCALL keyinput( int , int );
+void GLFWCALL charinput( int , int  );
+void GLFWCALL titleinput( int , int );
 std::queue<int> game::event;
 Score game::score;
 Input game::input;
@@ -53,7 +58,7 @@ void game::set_mode(mode next)
 	glfwSetTime(0.0);
 	glfwSetCharCallback(NULL);
 	glfwSetKeyCallback(keyinput);
-	switch(current = next) {
+	switch (current = next) {
 		case MODE_LOGO:
 			break;
 		case MODE_TITLE:
@@ -69,9 +74,9 @@ void game::set_mode(mode next)
 }
 void GLFWCALL keyinput( int key, int action )
 {
-	if(action == GLFW_PRESS)
+	if (action == GLFW_PRESS)
 	{
-		switch(key) {
+		switch (key) {
 #ifdef MY_DEBUG
 			case GLFW_KEY_F1:
 				game::set_mode(MODE_LOGO);
@@ -91,13 +96,13 @@ void GLFWCALL keyinput( int key, int action )
 				break;
 #endif // MY_DEBUG
 			case GLFW_KEY_BACKSPACE:
-				if(game::get_mode()==MODE_GAME) {
+				if (game::get_mode()==MODE_GAME) {
 					game::push_event(key);
 				}
 				return;
 				break;
 			case GLFW_KEY_ENTER:
-				switch(game::get_mode()) {
+				switch (game::get_mode()) {
 					case MODE_LOGO:
 						game::set_mode(MODE_TITLE);
 						return;
@@ -119,7 +124,7 @@ void GLFWCALL keyinput( int key, int action )
 						break;
 				}
 			case GLFW_KEY_SPACE:
-				if(game::get_mode()==MODE_GAME) game::flag=true;
+				if (game::get_mode()==MODE_GAME) game::flag=true;
 			default:
 				break;
 
@@ -133,15 +138,15 @@ void GLFWCALL titleinput( int character, int action )
 }
 void GLFWCALL charinput( int character, int action )
 {
-	if(action == GLFW_PRESS) 
+	if (action == GLFW_PRESS)
 	{
-		if(game::get_mode()==MODE_TITLE) {
+		if (game::get_mode()==MODE_TITLE) {
 			game::set_mode(MODE_GAME);
 			return;
 		}
-		if(glfwGetKey(GLFW_KEY_LCTRL)==GLFW_PRESS ||
+		if (glfwGetKey(GLFW_KEY_LCTRL)==GLFW_PRESS ||
 				glfwGetKey(GLFW_KEY_RCTRL)==GLFW_PRESS) {
-			switch(character) {
+			switch (character) {
 				case 'h':
 				case 'H':
 					game::push_event(GLFW_KEY_BACKSPACE);
