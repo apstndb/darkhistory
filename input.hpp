@@ -6,9 +6,8 @@ class Input {
 	std::wstring* kana;
 	bool lock_;
 	public:
-	Input()
-	{
-	}
+	Input();
+	~Input();
 	void backspace();
 	void clear();
 

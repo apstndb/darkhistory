@@ -1,6 +1,5 @@
 #ifndef MYGLLIB_HPP
 #define MYGLLIB_HPP
-//#include <string>
 #include <GL/gl.h>
 #include <vector>
 enum RenderFlag {

@@ -41,6 +41,7 @@ KanaSet::KanaSet(const char* filename)
 		if (2 != v.size()) continue;
 		push(KanaYomi(v[1],v[0]));
 	}
+	sort(kanaset.begin(), kanaset.end());
 }
 wstring KanaSet::to_kana(const wstring& yomi)
 {
@@ -48,11 +49,10 @@ wstring KanaSet::to_kana(const wstring& yomi)
 		return yomi;
 	} else {
 		wstring kana;
-		kanaset_yomi_index& index = kanaset.get<by_yomi>();
-		kanaset_yomi_index::iterator iter;
+		kanaset_set_t::iterator iter;
 		for (unsigned int i = 1; i <= yomi.size();i++) {
-			iter = index.find(yomi.substr(0,i));
-			if (iter != index.end())
+			iter = find(kanaset.begin(), kanaset.end(), yomi.substr(0,i));
+			if (iter != kanaset.end())
 				return iter->kana + to_kana(yomi.substr(i));
 		}
 	}

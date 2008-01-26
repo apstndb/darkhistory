@@ -1,6 +1,5 @@
 #ifndef MYLIB_HPP
 #define MYLIB_HPP
-//#include <string>
 
 /**
  * 2つのコンテナの先頭から最長一致する部分の長さを返す

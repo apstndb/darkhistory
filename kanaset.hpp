@@ -1,11 +1,7 @@
 #ifndef KANASET_HPP
 #define KANASET_HPP
 #include <string>
-#include <boost/multi_index_container.hpp>
-#include <boost/multi_index/ordered_index.hpp>
-#include <boost/multi_index/key_extractors.hpp>
-#include <boost/multi_index/random_access_index.hpp>
-using namespace boost::multi_index;
+#include <vector>
 struct KanaYomi {
 	std::wstring kana;
 	std::wstring yomi;
@@ -13,9 +9,15 @@ struct KanaYomi {
 		: kana(),yomi()
 	{
 	}
-	KanaYomi(std::wstring& kana_, std::wstring& yomi_)
+	explicit KanaYomi(std::wstring& kana_, std::wstring& yomi_)
 		: kana(kana_),yomi(yomi_)
 	{
+	}
+	bool operator==(const std::wstring& other) const {
+		return yomi == other; 
+	}
+	bool operator<(const KanaYomi& other) const {
+		return yomi < other.yomi; 
 	}
 };
 struct by_kana {};
@@ -52,17 +54,9 @@ class KanaSet {
 		maxchar=(maxchar<i)?i:maxchar;
 	};
 	public:
-	typedef multi_index_container<
-		KanaYomi,
-		indexed_by<
-			random_access<tag<by_random> >,
-		ordered_unique<tag<by_yomi>,identity<KanaYomi>,yomi_comparator >			>
-			> kanaset_set_t;
+	typedef std::vector<KanaYomi> kanaset_set_t;
 	kanaset_set_t kanaset;
-	typedef kanaset_set_t::index<by_yomi>::type kanaset_yomi_index;
-	typedef kanaset_set_t::index<by_random>::type kanaset_random_index;
 
-	//inline KanaYomi random();
 	std::wstring to_kana(const std::wstring&);
 	KanaSet(const char*); 
 };
